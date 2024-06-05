@@ -1,0 +1,38 @@
+header {
+  padding: 0 1rem;
+}
+header,
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+ul {
+  border: 1.5px solid black;
+  max-height: min-content;
+  padding: 2px 5px 5px 5px;
+  border-radius: 24px;
+  /* text-align: center; */
+}
+.drop-down {
+  display: none;
+}
+ul {
+  padding: 0;
+  list-style: none;
+  gap: 0.4rem;
+  margin: 0;
+  display: flex;
+}
+
+.sports-menu:hover .drop-down {
+  display: initial;
+  background-color: white;
+  padding: 5px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}

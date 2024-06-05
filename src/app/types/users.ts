@@ -4,5 +4,6 @@ export interface User {
   team: string;
   password: string;
   email: string;
-  id:Date;
+  id:number;
+  avatar:string;
 }

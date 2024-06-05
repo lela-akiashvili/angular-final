@@ -4,8 +4,8 @@ import { Component } from '@angular/core';
   selector: 'app-sign-out',
   standalone: true,
   imports: [],
-  templateUrl: './sign-out.component.html',
-  styleUrl: './sign-out.component.css'
+  templateUrl: './sign-up.component.html',
+  styleUrl: './sign-up.component.css'
 })
 export class SignOutComponent {
 

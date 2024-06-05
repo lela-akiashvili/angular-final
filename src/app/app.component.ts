@@ -1,16 +1,17 @@
-import { CommonModule, JsonPipe } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { Database, ref, set, onValue } from '@angular/fire/database';
-import { FormsModule } from '@angular/forms';
+// app.component.ts
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { HeaderComponent } from './shared/components/header/header.component';
+
 @Component({
   selector: 'app-root',
+  template: `
+   <app-header></app-header>
+    <router-outlet></router-outlet>
+  `,
   standalone: true,
-  imports: [RouterOutlet, JsonPipe, CommonModule, FormsModule],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  imports: [
+   RouterOutlet,HeaderComponent
+  ]
 })
-export class AppComponent {
-  title = 'angular-final';
- 
-}
+export class AppComponent {}

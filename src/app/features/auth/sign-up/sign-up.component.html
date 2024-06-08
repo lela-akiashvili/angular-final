@@ -1,19 +1,48 @@
-<form action="">
+<h2>Register</h2>
+<form [formGroup]="signUpForm">
   <div>
-    <label for="type">Who Are You?</label> <input type="radio" /><input
-      type="radio"
-    /><input type="radio" />
-  </div>
-  <div>
-    <label for="name">Name</label>
-    <input type="text" id="name" />
-  </div>
-  <div>
-    <label for="name">Name</label>
-    <input type="text" id="name" />
-  </div>
-  <div>
-    <label for="name">Name</label>
-    <input type="text" id="name" />
+    <h3>Who Are You</h3>
+    <div>
+      <input
+        type="radio"
+        id="teamMember"
+        name="userType"
+        value="TeamMember"
+        formControlName="userType"
+      />
+      <label for="teamMember">Associate Member</label>
+    </div>
+    <div>
+      <input
+        type="radio"
+        id="regularUser"
+        name="userType"
+        value="User"
+        formControlName="userType"
+      />
+      <label for="regularUser">Regular User</label>
+    </div>
+    @if (contorls.userType.value === "TeamMember") {
+      <div>
+        <label for="role">Choose Your Role In The Team</label>
+        <br />
+        <select name="role" id="role" formControlName="role">
+          <option value="coach">Coach</option>
+          <option value="manager">Manager</option>
+          <option value="player">Player</option>
+        </select>
+      </div>
+      @if (
+        contorls.role.value === "coach" || contorls.role.value === "Manager"
+      ) {
+        <div>
+          <div>
+            <label for="firstName">firstname</label>
+            <input type="text" placeholder="enter your name" />
+          </div>
+        </div>
+      }
+    }
+    <button (click)="onClick()">click</button>
   </div>
 </form>

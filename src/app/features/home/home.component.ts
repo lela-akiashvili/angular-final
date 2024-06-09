@@ -6,9 +6,16 @@ import { NewsCardComponent } from '../../shared/components/news-card/news-card.c
   selector: 'app-home',
   standalone: true,
   imports: [ProfileComponent, NewsCardComponent],
-  template:`<app-profile></app-profile>
-<app-news-card></app-news-card>`,
-  styleUrl: './home.component.css'
+  template:`
+  <section>
+<app-news-card></app-news-card></section>
+ `,
+  styles: `section{
+    background-color:black; 
+    min-height:100vh;
+
+    padding:20px 5px 0 5px;
+  }`,
 })
 export class HomeComponent {
 

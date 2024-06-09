@@ -19,15 +19,15 @@ export class UsersFirebaseService {
       idField: 'id',
     }) as Observable<TeamMember[]>;
   }
-  addUser(user: TeamMember) {
-    return addDoc(this.usersCollection, user)
-      .then(() => {
-        console.log('added');
-      })
-      .catch((error) => {
-        console.log('user not added', error);
-      });
-  }
+  // addUser(user: TeamMember) {
+  //   return addDoc(this.usersCollection, user)
+  //     .then(() => {
+  //       console.log('added');
+  //     })
+  //     .catch((error) => {
+  //       console.log('user not added', error);
+  //     });
+  // }
   getUserById(userId: string): Observable<TeamMember> {
     const userDocRef = doc(this.firestore, `users/${userId}`);
     return from(

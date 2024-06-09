@@ -1,35 +1,47 @@
-h4,h5{
-    margin:0;
-  }
-  h4,p,.about{
-    font-size:small;
-  }
-  h5:hover{
-    text-decoration:underline;
-    cursor:pointer;
-  }
-   div{
-    margin:5px;
-    display:flex; 
-    max-height:25vh;
-    overflow:hidden;
-    gap:0.7rem;
-    border:1px solid gray;
-    box-shadow:0 0 5px 1px gray;
-    border-radius:5px
-   }
-   img{
-    max-width:40%;
-   height:25vh;
-   float:left;
-   }
-   .about{
-    display:flex;
-    gap:0.4rem;
-    font-style:italic;
-    color:gray;
-    align-items:center;
-   }
-   p{
-    margin:1px 0 0 0;
-   }
+div {
+  display: grid;
+  gap: 1rem;
+}
+h4,
+h5 {
+  margin: 2px;
+  word-break: break-all;
+}
+h4,
+p,
+.about {
+  font-size: small;
+}
+
+h5:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.card {
+  display: flex;
+  max-height: 25vh;
+  overflow: hidden;
+  gap: 0.5rem;
+  border-radius: 5px;
+  background-color: rgb(255, 230, 218);
+}
+img {
+  max-width: 40%;
+  max-height: 25vh;
+  float: left;
+}
+.about {
+  display: flex;
+  gap: 0.4rem;
+  font-style: italic;
+  color: gray;
+  justify-content: flex-end;
+}
+p {
+  margin: 1px 0 0 0;
+  font-size: 12px;
+}
+a {
+  color: rgb(28, 28, 28);
+}

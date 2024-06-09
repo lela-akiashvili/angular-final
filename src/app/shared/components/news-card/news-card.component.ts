@@ -7,8 +7,10 @@ import { RouterLink } from '@angular/router';
   selector: 'app-news-card',
   standalone: true,
   imports: [RouterLink],
-  template: `@for (news of newsSig(); track news.id) {
-    <div>
+  template: `
+  <div>
+     @for (news of newsSig(); track news.id) {
+    <div class="card">
       <img [src]="news.src" alt="" />
       <span>
         <h4>
@@ -22,7 +24,11 @@ import { RouterLink } from '@angular/router';
         <p>{{ news.text }}</p>
       </span>
     </div>
-  } `,
+  }
+  </div>
+
+  
+  `,
   styleUrl: `./news.component.css`,
 })
 export class NewsCardComponent implements OnInit {

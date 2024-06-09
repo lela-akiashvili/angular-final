@@ -3,14 +3,13 @@ import { HomeComponent } from './features/home/home.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
 import { TicketsComponent } from './features/tickets/tickets.component';
 import { NewsPageComponent } from './features/news-page/news-page.component';
+import { Component } from '@angular/core';
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   {
     path: 'news-page/:id',
-    loadComponent: () =>
-      import('./features/news-page/news-page.component').then(
-        (m) => m.NewsPageComponent,
-      ),
+    component: NewsPageComponent,
+      
   },
   {
     path: 'auth',

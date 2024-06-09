@@ -1,34 +1,43 @@
-import { Component, OnInit, Signal, inject, signal } from '@angular/core';
-import { NewsFirebaseService } from '../../shared/services/NewsFirebase.service';
-import { Observable } from 'rxjs';
-import { News } from '../../types/news';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NewsFirebaseService } from '../../shared/services/NewsFirebase.service';
+import { News } from '../../types/news';
+
 import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-news-page',
   standalone: true,
   imports: [DatePipe],
-  template: ` <h1>hi</h1>
-    @if (news) {
-      <img [src]="news.src" alt="" />
-      <h1>{{ news.title }}</h1>
-      <p>{{ news.date | date }}</p>
-      <h3>tags: {{ news.about }}</h3>
-      <p>{{ news.text }}</p>
-    }`,
+  template: `<section>
+    @if (newsPage) {
+      <img [src]="newsPage.src" alt="" />
+      <h1>{{ newsPage.title }}</h1>
+      <h3>
+        tags:
+        @for (tag of newsPage.about; track $index) {
+          <span> {{ tag }}</span
+          >,
+        }
+      </h3>
+      <p>{{ newsPage.text }}</p>
+    }
+  </section> `,
   styleUrl: './news-page.component.css',
 })
 export class NewsPageComponent implements OnInit {
-  route = inject(ActivatedRoute);
+  activatedRoutes = inject(ActivatedRoute);
   newsFierbaseService = inject(NewsFirebaseService);
-  news: News | null = null;
+  newsPage: News | null = null;
   ngOnInit(): void {
-    this.route.paramMap.subscribe((paramMap) => {
+    this.activatedRoutes.paramMap.subscribe((paramMap) => {
       const id = paramMap.get('id');
       if (id) {
-     console.log(id) ;
-    //  this.news.id
+        console.log(id);
+        this.newsFierbaseService.getItemById(id).then((news) => {
+          this.newsPage = news;
+          console.log(this.newsPage);
+        });
       }
     });
   }

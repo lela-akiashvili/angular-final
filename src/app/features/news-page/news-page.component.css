@@ -1,0 +1,35 @@
+section {
+  background-color: black;
+  color: rgb(228, 228, 228);
+}
+section {
+  padding: 2rem 0.4rem;
+
+  overflow: hidden;
+}
+img {
+  max-width: 100%;
+  border-radius: 15px;
+}
+h1 {
+  font-size: large;
+  text-align: center;
+  padding: 0 10px;
+  margin: 2rem 0;
+}
+h3 {
+  text-align: right;
+  font-size: medium;
+  font-style: italic;
+  color: gray;
+  margin-top: 0;
+  font-weight: 600;
+}
+span:hover {
+  text-decoration: underline;
+}
+p {
+  padding: 0 10px;
+  text-align: justify;
+  line-height: 1.5;
+}

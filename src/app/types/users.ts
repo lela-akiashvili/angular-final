@@ -1,15 +1,17 @@
 export interface User {
   firstName: string;
-  lastName:string;
-  age: number;
-  password: string;
+  lastName: string;
   email: string;
-  id: number;
+  age: string;
+  password: string;
   avatar: string;
 }
+
 export interface TeamMember extends User {
+  userType: string;
+  role: string;
   team: string;
-  role:string;
-  position: string;
-  experience: number;
+  experience: string;
+  position?: string;
+  id?: string;
 }

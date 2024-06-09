@@ -13,7 +13,7 @@ import { HeaderComponent } from './shared/components/header/header.component';
   imports: [RouterOutlet, HeaderComponent],
   styles: `
     main {
-      margin-top: 1rem;
+      margin-top: 4.5px;
     }
   `,
 })

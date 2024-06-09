@@ -13,9 +13,9 @@ export class ProfileComponent implements OnInit {
   private usersFirebaseService = inject(UsersFirebaseService);
   userSig = signal<TeamMember[]>([]);
   ngOnInit(): void {
-    this.usersFirebaseService.getUsers().subscribe((users) => {
-      this.userSig.set(users);
-      console.log(this.userSig());
-    });
+    // this.usersFirebaseService.getUsers().subscribe((users) => {
+    //   this.userSig.set(users);
+    //   console.log(this.userSig());
+    // });
   }
 }

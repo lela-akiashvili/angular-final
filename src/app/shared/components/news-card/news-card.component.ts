@@ -1,16 +1,18 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { NewsFirebaseService } from '../../services/NewsFirebase.service';
 import { News } from '../../../types/news';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-news-card',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   template: `@for (news of newsSig(); track news.id) {
     <div>
       <img [src]="news.src" alt="" />
       <span>
-        <h4>{{ news.title }}</h4>
+        <h4>
+          <a routerLink="/news-page/{{news.id}}">{{ news.title }}</a></h4>
         <span class="about"
           >tags:
           @for (item of news.about; track $index) {

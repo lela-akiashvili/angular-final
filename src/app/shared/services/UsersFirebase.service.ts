@@ -7,11 +7,10 @@ import {
   doc,
 } from '@angular/fire/firestore';
 import { Observable, from } from 'rxjs';
-import { TeamMember } from '../../types/users';
+import { TeamMember, User } from '../../types/users';
 import { getDoc } from 'firebase/firestore';
 @Injectable({ providedIn: 'root' })
 export class UsersFirebaseService {
-  
   private firestore = inject(Firestore);
   private usersCollection = collection(this.firestore, 'users');
 
@@ -20,15 +19,19 @@ export class UsersFirebaseService {
       idField: 'id',
     }) as Observable<TeamMember[]>;
   }
-  addUser(data: TeamMember) {
-    const userCreate: TeamMember = { ...data };
-    const promise = addDoc(this.usersCollection, userCreate).then(
-      (response) => response.id,
-    );
-    return from(promise);
+  addUser(user: TeamMember) {
+    return addDoc(this.usersCollection, user)
+      .then(() => {
+        console.log('added');
+      })
+      .catch((error) => {
+        console.log('user not added', error);
+      });
   }
-  getUserById(userId: number): Observable<TeamMember> {
+  getUserById(userId: string): Observable<TeamMember> {
     const userDocRef = doc(this.firestore, `users/${userId}`);
-    return from(getDoc(userDocRef).then((docSnap) => docSnap.data() as TeamMember));
+    return from(
+      getDoc(userDocRef).then((docSnap) => docSnap.data() as TeamMember),
+    );
   }
 }

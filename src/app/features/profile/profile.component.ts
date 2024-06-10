@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { UsersFirebaseService } from '../../shared/services/UsersFirebase.service';
-import { TeamMember } from '../../types/users';
+import { User } from '../../types/users';
 
 @Component({
   selector: 'app-profile',
@@ -11,7 +11,7 @@ import { TeamMember } from '../../types/users';
 })
 export class ProfileComponent implements OnInit {
   private usersFirebaseService = inject(UsersFirebaseService);
-  userSig = signal<TeamMember[]>([]);
+  userSig = signal<User[]>([]);
   ngOnInit(): void {
     // this.usersFirebaseService.getUsers().subscribe((users) => {
     //   this.userSig.set(users);

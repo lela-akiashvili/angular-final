@@ -1,6 +1,5 @@
 import { Component, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
-
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -26,16 +25,8 @@ import { RouterLink } from '@angular/router';
           <li><a routerLink="/tickets" (click)="onShowMenu()">Tickets</a></li>
         </ul>
         <ul>
-          <li>
-            <a routerLink="/auth/sign-in" (click)="onShowMenu()">
-              Sign in <i class="bi bi-box-arrow-in-right"></i
-            ></a>
-          </li>
-          <li>
-            <a routerLink="/auth/sign-up" (click)="onShowMenu()"
-              >Sign up <i class="bi bi-person-circle"></i
-            ></a>
-          </li>
+          <ng-content
+            ></ng-content>
         </ul>
       </nav>
     </header>

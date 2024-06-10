@@ -1,0 +1,31 @@
+form {
+  background-color: rgb(49, 49, 49);
+  color: white;
+  padding: 5px 0;
+  text-align: center;
+  min-height: 100vh;
+}
+div {
+  max-width: fit-content;
+  margin: auto;
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
+input::placeholder {
+  font-style: italic;
+}
+input {
+  padding: 6px 0 6px 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+button {
+  max-width: fit-content;
+  margin: auto;
+  padding: 10px 15px;
+  background-color: rgb(204, 204, 204);
+  border: none;
+  border-bottom: 1.4px solid red;
+}

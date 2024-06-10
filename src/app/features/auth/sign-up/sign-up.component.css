@@ -32,21 +32,11 @@ select {
   border: none;
   outline: none;
 }
-/* input:invalid{
-  border: 2px solid red;
-} */
 button {
   max-width: fit-content;
   margin: auto;
   padding: 10px 15px;
-  background-color: rgb(255, 255, 255);
-  border: none;
-  border-radius: 15px;
-  transition: transform 0.4s ease;
-}
-button:hover {
-  background-color: rgb(87, 128, 0);
   color: white;
-  cursor: pointer;
-  transform: scale(1.2);
+  border: none;
+  border-bottom: 1.4px solid red;
 }

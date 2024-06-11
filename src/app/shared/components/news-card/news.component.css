@@ -24,7 +24,7 @@ h5:hover {
   overflow: hidden;
   gap: 0.5rem;
   border-radius: 5px;
-  background-color: rgb(255, 230, 218);
+  background-color: rgb(204, 204, 204);
 }
 img {
   max-width: 40%;

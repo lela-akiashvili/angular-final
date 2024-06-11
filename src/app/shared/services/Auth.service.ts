@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   Auth,
   createUserWithEmailAndPassword,
@@ -9,61 +9,78 @@ import {
 } from '@angular/fire/auth';
 import { UsersFirebaseService } from './UsersFirebase.service';
 import { User } from '../../types/users';
-import { BehaviorSubject, from, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { from, Observable, BehaviorSubject } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private auth = inject(Auth);
   private usersFirebaseService = inject(UsersFirebaseService);
-  private signedInSub = new BehaviorSubject<boolean>(false);
-  signedIn$ = this.signedInSub.asObservable();
 
-  registerUser(
-    email: string,
-    password: string,
-    teamMemberData: User,
-  ): Observable<UserCredential> {
-    return from(
-      createUserWithEmailAndPassword(this.auth, email, password),
-    ).pipe(
+  private signedInSubject = new BehaviorSubject<boolean>(false);
+  private currentUserIdSubject = new BehaviorSubject<string | null>(null);
+
+  get signedIn$() {
+    return this.signedInSubject.asObservable();
+  }
+
+  get currentUserId$() {
+    return this.currentUserIdSubject.asObservable();
+  }
+
+  constructor() {
+    this.auth.onAuthStateChanged((user) => {
+      this.signedInSubject.next(!!user);
+      this.currentUserIdSubject.next(user ? user.uid : null);
+    });
+  }
+
+  registerUser(email: string, password: string, teamMemberData: User): Observable<UserCredential> {
+    return from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
       switchMap((userCredential: UserCredential) => {
         const uid = userCredential.user.uid;
         const userData: User = { ...teamMemberData, id: uid };
         const { password: _, ...userDataWithoutPassword } = userData;
-        return from(
-          this.usersFirebaseService.addUser(userDataWithoutPassword),
-        ).pipe(
+        return from(this.usersFirebaseService.addUser(userDataWithoutPassword)).pipe(
           switchMap(() => from(sendEmailVerification(userCredential.user))),
           switchMap(() => from([userCredential])),
+          tap(() => this.currentUserIdSubject.next(uid))
         );
-      }),
+      })
     );
   }
+
   signInUser(email: string, password: string): Observable<UserCredential> {
-    if (this.signedInSub.value) {
-      throw console.error('user already signed in');
+    if (this.signedInSubject.value) {
+      alert('User already signed in');
+      throw new Error('User already signed in');
     }
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
       switchMap((userCredential: UserCredential) => {
         if (!userCredential.user.emailVerified) {
-          throw new Error('email not vertified');
+          throw new Error('Email not verified');
         }
-        this.signedInSub.next(true);
+        this.signedInSubject.next(true);
+        this.currentUserIdSubject.next(userCredential.user.uid);
         return from([userCredential]);
-      }),
+      })
     );
   }
 
-  signOut(): Observable<void> {
+  signOutUser(): Observable<void> {
     return from(signOut(this.auth)).pipe(
-      switchMap(() => {
-        this.signedInSub.next(false);
-        return from([void 0]);
-      }),
+      tap(() => {
+        this.signedInSubject.next(false);
+        this.currentUserIdSubject.next(null);
+      })
     );
   }
+
   isSignedIn(): boolean {
-    return this.signedInSub.value;
+    return this.signedInSubject.value;
+  }
+
+  getCurrentUserId(): string | null {
+    return this.currentUserIdSubject.value;
   }
 }

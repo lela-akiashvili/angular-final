@@ -15,7 +15,6 @@ import { News } from '../../types/news';
 export class NewsFirebaseService {
   private firestore = inject(Firestore);
   private newsCollection = collection(this.firestore, 'news');
-  // newsOb$:Observable<News>;
   getNews(): Observable<News[]> {
     return collectionData(this.newsCollection, { idField: 'id' }) as Observable<
       News[]
@@ -25,7 +24,7 @@ export class NewsFirebaseService {
     const docRef = doc(this.firestore, `news/${id}`);
     return getDoc(docRef).then((docSnap) => {
         if (docSnap.exists()) {
-            // console.log(docSnap.data());
+            console.log(docSnap.data());
             return docSnap.data() as News;
         } else {
             return null;

@@ -1,9 +1,8 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './features/home/home.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
-import { TicketsComponent } from './features/tickets/tickets.component';
 import { NewsPageComponent } from './features/news-page/news-page.component';
-import { Component } from '@angular/core';
+import { ProfileComponent } from './features/profile/profile.component';
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   {
@@ -16,6 +15,7 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
   },
+  {path:'profile/:uid', component:ProfileComponent},
   {
     path: 'tickets',
     loadComponent: () =>

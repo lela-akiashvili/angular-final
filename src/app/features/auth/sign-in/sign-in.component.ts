@@ -29,14 +29,14 @@ export class SignInComponent {
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
-  
+
   onSubmit() {
     if (this.signInForm.valid) {
       const { email, password } = this.signInForm.value;
       this.authService.signInUser(email!, password!).subscribe({
         next: (userCredential) => {
-          console.log('im in',userCredential) ;
-          this.router.navigate(['/home']);
+          console.log('im in', userCredential);
+          this.router.navigate([`/profile/${userCredential.user.uid}`]);
         },
         error: (error) => {
           console.log('not in ', error);

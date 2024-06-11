@@ -1,0 +1,28 @@
+section{
+padding: 1rem;
+}
+
+ul{
+    list-style: none;
+    padding: 0;
+    display: flex;
+    /* gap: 1rem; */
+    justify-content: center;
+}
+li{
+    padding: 0 8px;
+    border-right: 1px solid red;
+}
+li:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+li:last-child{
+    border: none;
+}
+span{
+    font-style: italic;
+}
+h2,span{
+    text-transform: capitalize;
+}

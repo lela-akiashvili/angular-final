@@ -7,11 +7,10 @@ export interface User {
   age: string;
   password: string;
   avatar?: string;
-  userType: string;
+  userType: 'regularUser'|'TeamMember';
   role?: string;
   team?: string;
   experience?: string;
   position?: string;
   id?: string;
-  favourites:News[];
 }

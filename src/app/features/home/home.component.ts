@@ -8,7 +8,7 @@ import { NewsCardComponent } from '../../shared/components/news-card/news-card.c
   imports: [ProfileComponent, NewsCardComponent],
   template:`
   <section>
-<!-- <app-news-card></app-news-card></section> -->
+<app-news-card></app-news-card></section>
  `,
   styles: `section{
     background-color:black; 

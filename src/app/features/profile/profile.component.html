@@ -1,6 +1,27 @@
-<!-- <section>
+<section>
+  <div>
+    @if (user && user.userType === "regularUser" && show === "Bio") {
+      <ul>
+        <li (click)="show = 'News'">Your News</li>
+        <li (click)="show = 'Favourites'">Favourites</li>
+        <li (click)="(show === 'Bio')" routerLink="/profile/{{ user.id }}">
+          Bio
+        </li>
+      </ul>
+      <img src="{{ user.avatar }}" alt="" />
+      <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+      <p>
+        contact: <span>{{ user.email }}</span>
+      </p>
+      <p>Age: {{ user.age }}</p>
+      @if (user.team) {
+        <p>Team: {{ user.team }}</p>
+        <p>Experience: {{ user.experience }}</p>
 
-  @for (user of userSig(); track user.id) {
-    <p>{{user.firstName}}</p>
-  }
-</section> -->
+        <p>{{ user.position }}</p>
+        <p>Role:{{ user.role }}</p>
+      }
+    } @else if (user?.userType === "TeamMember" && user?.role === "coach") {}
+  </div>
+  <router-outlet></router-outlet>
+</section>

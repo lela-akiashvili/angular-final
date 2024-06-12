@@ -1,10 +1,5 @@
 section {
-  background-color: black;
-  color: rgb(228, 228, 228);
-}
-section {
   padding: 2rem 0.4rem;
-
   overflow: hidden;
 }
 img {
@@ -16,12 +11,13 @@ h1 {
   text-align: center;
   padding: 0 10px;
   margin: 2rem 0;
+  text-transform: capitalize;
 }
 h3 {
   text-align: right;
   font-size: medium;
   font-style: italic;
-  color: gray;
+
   margin-top: 0;
   font-weight: 600;
 }

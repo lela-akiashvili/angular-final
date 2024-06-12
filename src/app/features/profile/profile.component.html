@@ -1,27 +1,122 @@
 <section>
   <div>
-    @if (user && user.userType === "regularUser" && show === "Bio") {
+    @if (user && user.userType === "regularUser") {
       <ul>
-        <li (click)="show = 'News'">Your News</li>
-        <li (click)="show = 'Favourites'">Favourites</li>
-        <li (click)="(show === 'Bio')" routerLink="/profile/{{ user.id }}">
-          Bio
-        </li>
+        <li (click)="show = 'news'">Your News</li>
+        <li (click)="show = 'favourites'">Favourites</li>
+        <li (click)="show = 'tickets'">Tickets</li>
+        <li (click)="show = 'bio'">Bio</li>
       </ul>
-      <img src="{{ user.avatar }}" alt="" />
-      <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-      <p>
-        contact: <span>{{ user.email }}</span>
-      </p>
-      <p>Age: {{ user.age }}</p>
-      @if (user.team) {
+      @if (show === "bio") {
+        <img src="{{ user.src }}" alt="" />
+        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+        <p>
+          contact: <span>{{ user.email }}</span>
+        </p>
+        <p>Age: {{ user.age }}</p>
+      } @else if (show === "favourites") {
+        <div>hi</div>
+      } @else if (show === "tickets") {
+        <div>bye</div>
+      } @else if (show === "news") {
+        <h2>articles you created</h2>
+        @for (news of allNews; track news.title) {
+          <div class="card">
+            <img [src]="news.src" alt="" />
+            <h2>{{ news.title }}</h2>
+            <h4>tags: {{ news.about }}</h4>
+            <p>{{ news.text }}</p>
+            <i class="bi bi-trash" (click)="deleteNews(news.id!)"></i>
+          </div>
+        } @empty {
+          <p>you haven't written any news yet</p>
+        }
+        <button (click)="togglebutton()">Add News Now</button>
+
+        <form
+          [style.display]="addButton ? 'block' : 'none'"
+          action=""
+          [formGroup]="addNewsForm"
+          (ngSubmit)="addNews()"
+        >
+          <div>
+            <label for="title">Title</label>
+            <input
+              type="text"
+              placeholder="news title here"
+              id="title"
+              formControlName="title"
+            />
+            @if (controls.title.dirty && controls.title.errors) {
+              <span class="warning">Title must be longer than 7 letters</span>
+            }
+          </div>
+          <div>
+            <label for="about">Tags</label>
+            <input
+              type="text"
+              placeholder="e.g: seirin,too"
+              id="about"
+              formControlName="about"
+            />
+          </div>
+          <div>
+            <label for="text">Text</label>
+            <textarea name="text" id="text" formControlName="text"></textarea>
+            @if (controls.text.dirty && controls.text.errors) {
+              <span class="warning">Title must be longer than 50 letters</span>
+            }
+          </div>
+          <div>
+            <label for="src">Cover Image</label>
+            <input
+              id="src"
+              type="text"
+              placeholder="link"
+              formControlName="src"
+            />
+            @if (controls.src.dirty && controls.src.errors) {
+              <span class="warning">Title must be longer than 10 letters</span>
+            }
+          </div>
+          <div>
+            <label for="date">Date</label>
+            <input type="date" id="date" formControlName="date" />
+            @if (controls.date.dirty && controls.date.errors) {
+              <p>bbg fill in the field</p>
+            }
+          </div>
+          <button
+            type="submit"
+            [disabled]="addNewsForm.invalid"
+            (click)="togglebutton()"
+            (click)="addNewsForm.reset()"
+          >
+            add news
+          </button>
+        </form>
+      }
+    } @else if (user && user.userType === "TeamMember") {
+      <ul>
+        <li (click)="show = 'addPlayer'">Add Player</li>
+        <li (click)="show = 'addManager'">Add Manager</li>
+        <li (click)="show = 'manageTeam'">Manage Team</li>
+        <li (click)="show = 'bio'">Bio</li>
+      </ul>
+      @if (show === "bio") {
+        <img src="user.src" alt="" />
+        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+        <p>
+          contact: <span>{{ user.email }}</span>
+        </p>
+        <p>{{ user.position }}</p>
+        <p>Role: {{ user.role }}</p>
+        <p>Age: {{ user.age }}</p>
         <p>Team: {{ user.team }}</p>
         <p>Experience: {{ user.experience }}</p>
-
-        <p>{{ user.position }}</p>
-        <p>Role:{{ user.role }}</p>
+        <button>Delete User</button>
       }
-    } @else if (user?.userType === "TeamMember" && user?.role === "coach") {}
+    }
   </div>
   <router-outlet></router-outlet>
 </section>

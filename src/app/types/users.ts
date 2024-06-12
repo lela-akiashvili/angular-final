@@ -6,7 +6,7 @@ export interface User {
   email: string;
   age: string;
   password: string;
-  avatar?: string;
+  src?: string;
   userType: 'regularUser'|'TeamMember';
   role?: string;
   team?: string;

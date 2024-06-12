@@ -11,7 +11,7 @@ import { NewsCardComponent } from '../../shared/components/news-card/news-card.c
 <app-news-card></app-news-card></section>
  `,
   styles: `section{
-    background-color:black; 
+    // background-color:black; 
     min-height:100vh;
 
     padding:20px 5px 0 5px;

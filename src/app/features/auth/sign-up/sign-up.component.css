@@ -37,6 +37,7 @@ button {
   margin: auto;
   padding: 10px 15px;
   color: white;
+  background-color: rgb(202, 202, 202);
   border: none;
   border-bottom: 1.4px solid red;
 }

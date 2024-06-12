@@ -34,9 +34,9 @@ export class NewsPageComponent implements OnInit {
       const id = paramMap.get('id');
       if (id) {
         console.log(id);
-        this.newsFierbaseService.getItemById(id).then((news) => {
+        this.newsFierbaseService.getNewsById(id).then((news) => {
           this.newsPage = news;
-          console.log(this.newsPage);
+        
         });
       }
     });

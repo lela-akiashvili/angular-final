@@ -8,6 +8,8 @@ import {
   signOut,
 } from '@angular/fire/auth';
 import { UsersFirebaseService } from './UsersFirebase.service';
+import { NewsFirebaseService } from './NewsFirebase.service';
+import { News } from '../../types/news';
 import { User } from '../../types/users';
 import { from, Observable, BehaviorSubject } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
@@ -16,7 +18,7 @@ import { switchMap, tap } from 'rxjs/operators';
 export class AuthService {
   private auth = inject(Auth);
   private usersFirebaseService = inject(UsersFirebaseService);
-
+  private newsFirebaseService = inject(NewsFirebaseService);
   private signedInSubject = new BehaviorSubject<boolean>(false);
   private currentUserIdSubject = new BehaviorSubject<string | null>(null);
 
@@ -35,18 +37,26 @@ export class AuthService {
     });
   }
 
-  registerUser(email: string, password: string, teamMemberData: User): Observable<UserCredential> {
-    return from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
+  registerUser(
+    email: string,
+    password: string,
+    teamMemberData: User,
+  ): Observable<UserCredential> {
+    return from(
+      createUserWithEmailAndPassword(this.auth, email, password),
+    ).pipe(
       switchMap((userCredential: UserCredential) => {
         const uid = userCredential.user.uid;
         const userData: User = { ...teamMemberData, id: uid };
         const { password: _, ...userDataWithoutPassword } = userData;
-        return from(this.usersFirebaseService.addUser(userDataWithoutPassword)).pipe(
+        return from(
+          this.usersFirebaseService.addUser(userDataWithoutPassword),
+        ).pipe(
           switchMap(() => from(sendEmailVerification(userCredential.user))),
           switchMap(() => from([userCredential])),
-          tap(() => this.currentUserIdSubject.next(uid))
+          tap(() => this.currentUserIdSubject.next(uid)),
         );
-      })
+      }),
     );
   }
 
@@ -63,7 +73,7 @@ export class AuthService {
         this.signedInSubject.next(true);
         this.currentUserIdSubject.next(userCredential.user.uid);
         return from([userCredential]);
-      })
+      }),
     );
   }
 
@@ -72,7 +82,7 @@ export class AuthService {
       tap(() => {
         this.signedInSubject.next(false);
         this.currentUserIdSubject.next(null);
-      })
+      }),
     );
   }
 

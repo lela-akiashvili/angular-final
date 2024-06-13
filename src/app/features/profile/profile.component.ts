@@ -1,12 +1,25 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { UsersFirebaseService } from '../../shared/services/UsersFirebase.service';
 import { User } from '../../types/users';
-import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterOutlet,
+} from '@angular/router';
 import { AuthService } from '../../shared/services/Auth.service';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { NewsFirebaseService } from '../../shared/services/NewsFirebase.service';
 import { News } from '../../types/news';
 import { NewsCardComponent } from '../../shared/components/news-card/news-card.component';
+import { validatePassword } from 'firebase/auth';
+import { routes } from '../../app.routes';
 
 @Component({
   selector: 'app-profile',
@@ -20,12 +33,13 @@ export class ProfileComponent implements OnInit {
   private activatedRoutes = inject(ActivatedRoute);
   private newsFirebaseService = inject(NewsFirebaseService);
   private auth = inject(AuthService);
-
+  private router = inject(Router);
   addButton = false;
   togglebutton() {
     this.addButton = !this.addButton;
   }
   allNews: News[] = [];
+  faveNews: News[] = [];
   user: User | null = null;
   show:
     | 'news'
@@ -34,11 +48,45 @@ export class ProfileComponent implements OnInit {
     | 'bio'
     | 'addManager'
     | 'addPlayer'
-    | 'manageTeam' = 'bio';
+    | 'manageTeam'
+    | 'games'
+    | 'team' = 'favourites';
   get controls() {
     return this.addNewsForm.controls;
   }
+  get addplayerControl() {
+    return this.addPlayerForm.controls;
+  }
+  get addManagerControl() {
+    return this.addManagerForm.controls;
+  }
   private fb = inject(FormBuilder);
+
+  addPlayerForm = this.fb.group({
+    role: ['player'],
+    team: ['', [Validators.required]],
+    position: ['', [Validators.required]],
+    experience: ['', [Validators.required]],
+    firstName: ['', [Validators.required, Validators.maxLength(15)]],
+    lastName: ['', [Validators.required]],
+    age: ['', [Validators.required, Validators.maxLength(3)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
+    confirmPassword: ['', [Validators.required]],
+    src: [''],
+  });
+  addManagerForm = this.fb.group({
+    role: ['manager'],
+    team: ['', [Validators.required]],
+    experience: ['', [Validators.required]],
+    firstName: ['', [Validators.required, Validators.maxLength(15)]],
+    lastName: ['', [Validators.required]],
+    age: ['', [Validators.required, Validators.maxLength(3)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
+    confirmPassword: ['', [Validators.required]],
+    src: [''],
+  });
   addNewsForm = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(7)]],
     about: [''],
@@ -56,11 +104,16 @@ export class ProfileComponent implements OnInit {
         });
         this.newsFirebaseService.getNewsByUserId(userId).subscribe((news) => {
           this.allNews = news;
-          console.log(this.allNews);
           console.log(news);
         });
+        this.loadFavoriteNews(userId);
+        {
+          console.log(userId);
+        }
       }
     });
+    this.addPlayerForm.addValidators(this.passwordMatch());
+    this.addManagerForm.addValidators(this.passwordMatch());
   }
 
   addNews() {
@@ -97,6 +150,90 @@ export class ProfileComponent implements OnInit {
       error: (error) => {
         console.log("cant kill what's already dead", error.message);
       },
+    });
+  }
+  addNewPlayer() {
+    console.log(this.addPlayerForm.value);
+    if (this.addPlayerForm.valid) {
+      const teamMemberData: User = this.addPlayerForm.value as User;
+      this.auth
+        .registerUser(
+          this.addplayerControl.email.value!,
+          this.addplayerControl.password.value!,
+          teamMemberData,
+        )
+        .subscribe({
+          next: (userCredential) => {
+            console.log('User registered successfully:', userCredential);
+            alert(
+              'Make sure new user vertifies their email before signing in.',
+            );
+          },
+          error: (error) => {
+            console.error('Error registering user:', error.message);
+          },
+        });
+    }
+  }
+  addManager() {
+    console.log(this.addManagerForm.value);
+    if (this.addManagerForm.valid) {
+      const teamMemberData: User = this.addManagerForm.value as User;
+      this.auth
+        .registerUser(
+          this.addManagerControl.email.value!,
+          this.addManagerControl.password.value!,
+          teamMemberData,
+        )
+        .subscribe({
+          next: (userCredential) => {
+            console.log('User registered successfully:', userCredential);
+            alert(
+              'Make sure new user vertifies their email before signing in.',
+            );
+          },
+          error: (error) => {
+            console.error('Error registering user:', error.message);
+          },
+        });
+    }
+  }
+  passwordMatch() {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return control.value.password === control.value.confirmPassword
+        ? null
+        : {
+            passwordsMatching: 'Passwords do not match!',
+          };
+    };
+  }
+  deleteUser() {
+    this.auth.deleteUser().subscribe({
+      next: () => {
+        console.log('guy just got obliterated from existance');
+        this.router.navigate(['/home']);
+      },
+      error: (error) => {
+        console.log('cant find user', error);
+      },
+    });
+  }
+
+  loadFavoriteNews(userId: string): void {
+    this.usersFirebaseService.getFavorites(userId).subscribe({
+      next: (favoriteIds) => {
+        favoriteIds.forEach((newsId) => {
+          this.newsFirebaseService.getNewsById(newsId).subscribe({
+            next: (news) => {
+              if (news) {
+                this.faveNews.push(news);
+              }
+            },
+            error: (error) => console.error('Failed to fetch news', error),
+          });
+        });
+      },
+      error: (error) => console.error('Failed to get favorites', error),
     });
   }
 }

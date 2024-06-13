@@ -1,5 +1,3 @@
-import { News } from "./news";
-
 export interface User {
   firstName: string;
   lastName: string;
@@ -13,4 +11,5 @@ export interface User {
   experience?: string;
   position?: string;
   id?: string;
+  favorites?:string[];
 }

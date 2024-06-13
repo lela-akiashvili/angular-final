@@ -45,10 +45,8 @@
             placeholder="e.g: Nekoma"
             formControlName="team"
           />
-          @if (controls.team.dirty) {
-            @if (controls.team.errors?.["required"]) {
-              <h2 style="color: red; margin: 0">!</h2>
-            }
+          @if (controls.team.dirty && controls.team.errors?.["required"]) {
+            <h2 style="color: red; margin: 0">!</h2>
           }
         </div>
         <div>
@@ -59,10 +57,8 @@
             placeholder="e.g: 2 years"
             formControlName="experience"
           />
-          @if (controls.experience.dirty) {
-            @if (controls.experience.errors?.["required"]) {
-              <h2 style="color: red; margin: 0">!</h2>
-            }
+          @if (controls.experience.dirty && controls.experience.errors) {
+            <h2 style="color: red; margin: 0">!</h2>
           }
         </div>
         <div>
@@ -136,13 +132,12 @@
           }
         </div>
         <div>
-          <label for="avatar">Profile Image</label>
-          <input type="text" id="avatar" />
+          <label for="src">Profile Image</label>
+          <input type="text" id="src" formControlName="src" />
         </div>
         <button type="submit" [disabled]="signUpForm.invalid">Register</button>
       }
-      @if (controls.role.value === "player") 
-      {
+      @if (controls.role.value === "player") {
         <div>
           <label for="team">Team</label>
           <input
@@ -151,10 +146,8 @@
             placeholder="e.g: Nekoma"
             formControlName="team"
           />
-          @if (controls.team.dirty) {
-            @if (controls.team.errors?.["required"]) {
-              <h2 style="color: red; margin: 0">!</h2>
-            }
+          @if (controls.team.dirty && controls.team.errors) {
+            <h2 style="color: red; margin: 0">!</h2>
           }
         </div>
         <div>
@@ -165,10 +158,8 @@
             placeholder="e.g: setter"
             formControlName="position"
           />
-          @if (controls.position.dirty) {
-            @if (controls.position.errors?.["required"]) {
-              <h2 style="color: red; margin: 0">!</h2>
-            }
+          @if (controls.position.dirty && controls.position.errors) {
+            <h2 style="color: red; margin: 0">!</h2>
           }
         </div>
         <div>
@@ -179,10 +170,11 @@
             placeholder="e.g: 2 years"
             formControlName="experience"
           />
-          @if (controls.experience.dirty) {
-            @if (controls.experience.errors?.["required"]) {
-              <h2 style="color: red; margin: 0">!</h2>
-            }
+          @if (
+            controls.experience.dirty &&
+            controls.experience.errors?.["required"]
+          ) {
+            <h2 style="color: red; margin: 0">!</h2>
           }
         </div>
         <div>
@@ -256,8 +248,8 @@
           }
         </div>
         <div>
-          <label for="avatar">Profile Image</label>
-          <input type="text" id="avatar" />
+          <label for="src">Profile Image</label>
+          <input type="text" id="src" formControlName="src" />
         </div>
         <button type="submit" [disabled]="signUpForm.invalid">Register</button>
       }
@@ -265,45 +257,61 @@
     @if (controls.userType.value === "regularUser") {
       <div>
         <label for="firstName">Firstname</label>
-        <input type="text" id="firstName" placeholder="enter your name" formControlName ='firstName'>
-        @if (controls.firstName.dirty) {
-          @if (controls.firstName.errors?.["required"]) {
-            <h2 style="color: red; margin: 0">!</h2>
-          }
+        <input
+          type="text"
+          id="firstName"
+          placeholder="enter your name"
+          formControlName="firstName"
+        />
+        @if (
+          controls.firstName.dirty && controls.firstName.errors?.["required"]
+        ) {
+          <h2 style="color: red; margin: 0">!</h2>
         }
       </div>
       <div>
         <label for="lastName">Lastname</label>
-        <input type="text" id="lastName" placeholder="enter your lastname" formControlName ='lastName' />@if (controls.lastName.dirty) {
-          @if (controls.lastName.errors?.["required"]) {
-            <h2 style="color: red; margin: 0">!</h2>
-          }
+        <input
+          type="text"
+          id="lastName"
+          placeholder="enter your lastname"
+          formControlName="lastName"
+        />
+        @if (controls.lastName.dirty && controls.lastName.errors) {
+          <h2 style="color: red; margin: 0">!</h2>
         }
       </div>
       <div>
         <label for="email">Email</label>
-        <input type="email" id="email" placeholder="enter your email" formControlName ='email' />@if (controls.email.dirty) {
-          @if (controls.email.errors?.["required"]) {
-            <h2 style="color: red; margin: 0">!</h2>
-          }
+        <input
+          type="email"
+          id="email"
+          placeholder="enter your email"
+          formControlName="email"
+        />
+        @if (controls.email.dirty && controls.email.errors?.["required"]) {
+          <h2 style="color: red; margin: 0">!</h2>
         }
       </div>
       <div>
         <label for="age">Age</label>
-        <input type="text" id="age" placeholder="enter your age" formControlName ='age' />
-        @if (controls.age.dirty) {
-          @if (controls.age.errors?.["required"]) {
-            <h2 style="color: red; margin: 0">!</h2>
-          }
+        <input
+          type="text"
+          id="age"
+          placeholder="enter your age"
+          formControlName="age"
+        />
+        @if (controls.age.dirty && controls.age.errors?.["required"]) {
+          <h2 style="color: red; margin: 0">!</h2>
         }
       </div>
       <div>
         <label for="password">Password</label>
-        <input type="password" id="password" formControlName ='password'/>
-        @if (controls.password.dirty) {
-          @if (controls.password.errors?.["required"]) {
-            <h2 style="color: red; margin: 0">!</h2>
-          }
+        <input type="password" id="password" formControlName="password" />
+        @if (
+          controls.password.dirty && controls.password.errors?.["required"]
+        ) {
+          <h2 style="color: red; margin: 0">!</h2>
         }
       </div>
       <div>
@@ -312,17 +320,18 @@
           type="password"
           id="confirmPassword"
           placeholder="repeat password"
-          formControlName ='confirmPassword'
+          formControlName="confirmPassword"
         />
-        @if (controls.confirmPassword.dirty) {
-          @if (controls.confirmPassword.errors?.["required"]) {
-            <h2 style="color: red; margin: 0">!</h2>
-          }
+        @if (
+          controls.confirmPassword.dirty &&
+          controls.confirmPassword.errors?.["required"]
+        ) {
+          <h2 style="color: red; margin: 0">!</h2>
         }
       </div>
       <div>
-        <label for="avatar">Profile Image</label>
-        <input type="text" id="avatar" formControlName ='avatar'/>
+        <label for="src">Profile Image</label>
+        <input type="text" id="src" formControlName="src" />
       </div>
       <button type="submit" [disabled]="signUpForm.invalid">Register</button>
     }

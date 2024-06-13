@@ -57,6 +57,11 @@ button{
     margin: 1rem auto;
     display: flex;
 }
+button:hover{
+    cursor: pointer;
+    background-color: rgb(192, 192, 192);
+    color: white;
+}
 h2, h3, h4,p{
     padding: 0 1rem;
 }

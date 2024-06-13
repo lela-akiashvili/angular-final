@@ -27,22 +27,39 @@ export class NewsFirebaseService {
       News[]
     >;
   }
-  getNewsById(id: string): Promise<News | null> {
-    const docRef = doc(this.firestore, `news/${id}`);
-    return getDoc(docRef)
-      .then((docSnap) => {
-        if (docSnap.exists()) {
-          console.log(docSnap.data());
-          return docSnap.data() as News;
-        } else {
-          return null;
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching document:', error);
-        return null;
-      });
-  }
+  // getNewsById(id: string): Promise<News | null> {
+  //   const docRef = doc(this.firestore, `news/${id}`);
+  //   return getDoc(docRef)
+  //     .then((docSnap) => {
+  //       if (docSnap.exists()) {
+  //         console.log(docSnap.data());
+  //         return docSnap.data() as News;
+  //       } else {
+  //         return null;
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching document:', error);
+  //       return null;
+  //     });
+  // }
+
+getNewsById(id:string):Observable<News|null>{
+  const docRef = doc(this.firestore, `news/${id}`);
+  const docSnapPromise = getDoc(docRef).then((docSnap)=>{
+    if(docSnap.exists()){
+      console.log(docSnap.data());
+      return docSnap.data() as News;
+    }else{
+      return null
+    }
+  }).catch((error)=>{
+    console.error('cant fetch data', error);
+    return null;
+  });
+  return from(docSnapPromise)
+}
+
   addNews(news: Omit<News, 'id'>): Observable<string> {
     return from(addDoc(this.newsCollection, news)).pipe(
       map((docRef) => docRef.id)
@@ -65,4 +82,7 @@ export class NewsFirebaseService {
     console.log(id)
     return from(deleteDoc(docRef));
   }
+//   addNewsToFaves(id:string):Observable<News[]>{
+// const q = query(this.newsCollection,where(''))
+//   }
 }

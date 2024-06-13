@@ -1,7 +1,18 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, doc, getDoc,setDoc } from '@angular/fire/firestore';
-import { Observable, from } from 'rxjs';
+import {
+  Firestore,
+  arrayUnion,
+  collection,
+  collectionData,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from '@angular/fire/firestore';
+import { Observable, from, catchError, throwError, map } from 'rxjs';
 import { User } from '../../types/users';
+import { deleteDoc } from 'firebase/firestore';
+import { TreeError } from '@angular/compiler';
 
 @Injectable({ providedIn: 'root' })
 export class UsersFirebaseService {
@@ -9,16 +20,70 @@ export class UsersFirebaseService {
   private usersCollection = collection(this.firestore, 'users');
 
   getUsers(): Observable<User[]> {
-    return collectionData(this.usersCollection, { idField: 'id' }) as Observable<User[]>;
+    return collectionData(this.usersCollection, {
+      idField: 'id',
+    }) as Observable<User[]>;
   }
 
   addUser(user: Omit<User, 'password'>): Promise<void> {
     const userDocRef = doc(this.firestore, `users/${user.id}`);
-    return setDoc(userDocRef, user);
+    return setDoc(userDocRef, user).catch((error) => {
+      console.error('Error adding user:', error);
+      throw new Error('Failed to add user.');
+    });
   }
 
   getUserById(userId: string): Observable<User> {
     const userDocRef = doc(this.firestore, `users/${userId}`);
-    return from(getDoc(userDocRef).then((docSnap) => docSnap.data() as User));
+    return from(
+      getDoc(userDocRef).then((docSnap) => {
+        if (docSnap.exists()) {
+          return docSnap.data() as User;
+        } else {
+          throw new Error('User not found');
+        }
+      }),
+    ).pipe(
+      catchError((error) => {
+        console.error('Error getting user by ID:', error);
+        return throwError(() => new Error('Failed to get user by ID.'));
+      }),
+    );
+  }
+
+  deleteUser(id: string): Observable<void> {
+    const userDocRef = doc(this.firestore, `users/${id}`);
+    return from(deleteDoc(userDocRef)).pipe(
+      catchError((error) => {
+        console.error('Error deleting user:', error);
+        return throwError(() => new Error('Failed to delete user.'));
+      }),
+    );
+  }
+  addToFavorites(userId: string, newsId: string): Observable<void> {
+    const userDocRef = doc(this.firestore, `users/${userId}`);
+    return from(updateDoc(userDocRef, { favorites: arrayUnion(newsId) })).pipe(
+      catchError((error) => {
+        console.log('cant add to faves baby', error);
+        return throwError(() => new Error('usless stick'));
+      }),
+    );
+  }
+  getFavorites(userId: string): Observable<string[]> {
+    const userDocRef = doc(this.firestore, `users/${userId}`);
+    return from(getDoc(userDocRef)).pipe(
+      map((docSnap) => {
+        if (docSnap.exists()) {
+          const user = docSnap.data() as User;
+          return user.favorites || [];
+        } else {
+          throw new Error('user not on earth');
+        }
+      }),
+      catchError((error) => {
+        console.log(error);
+        return throwError(() => new Error('cant get your faves sorry babe'));
+      }),
+    );
   }
 }

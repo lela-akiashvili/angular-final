@@ -2,20 +2,12 @@ div {
   display: grid;
   gap: 1rem;
 }
-h4,
-h5 {
+h4 {
   margin: 2px;
-  word-break: break-all;
 }
 h4,
-p,
-.about {
+p {
   font-size: small;
-}
-
-h5:hover {
-  text-decoration: underline;
-  cursor: pointer;
 }
 
 .card {
@@ -24,19 +16,25 @@ h5:hover {
   overflow: hidden;
   gap: 0.5rem;
   border-radius: 5px;
-  background-color: rgb(228, 228, 228) ;
+  background-color: rgb(228, 228, 228);
 }
 img {
   max-width: 40%;
   max-height: 25vh;
   float: left;
 }
-.about {
-  display: flex;
-  gap: 0.4rem;
+
+h5 {
+  margin: 0;
+  font-weight: 500;
+}
+h5 span:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+h5 span {
   font-style: italic;
   color: gray;
-  justify-content: flex-end;
 }
 p {
   margin: 1px 0 0 0;
@@ -45,6 +43,7 @@ p {
 a {
   color: rgb(28, 28, 28);
 }
-i{
-  color: red;font-size: medium;
+i {
+  color: red;
+  font-size: medium;
 }

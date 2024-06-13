@@ -8,14 +8,32 @@
         <li (click)="show = 'bio'">Bio</li>
       </ul>
       @if (show === "bio") {
-        <img src="{{ user.src }}" alt="" />
+        <img [src]="user.src" alt="" />
         <h2>{{ user.firstName }} {{ user.lastName }}</h2>
         <p>
           contact: <span>{{ user.email }}</span>
         </p>
         <p>Age: {{ user.age }}</p>
+        <button (click)="deleteUser()">Delete User</button>
       } @else if (show === "favourites") {
-        <div>hi</div>
+        <div>    @for (news of faveNews; track news.title) {
+          <div class="card">
+            <img [src]="news.src" alt="" />
+            <span>
+              <h4>
+                <a routerLink="/news-page/{{ news.id }}">{{ news.title }}</a>
+              </h4>
+              <h5 class="about">
+                tags:
+                @for (item of news.about; track $index) {
+                  <span>{{ item }}, </span>
+                }
+                <i class="bi bi-bookmark-heart"></i>
+              </h5>
+              <p>{{ news.text }}</p>
+            </span>
+          </div>
+        }</div>
       } @else if (show === "tickets") {
         <div>bye</div>
       } @else if (show === "news") {
@@ -31,7 +49,7 @@
         } @empty {
           <p>you haven't written any news yet</p>
         }
-        <button (click)="togglebutton()">Add News Now</button>
+        <button (click)="togglebutton()" (click)="addNewsForm.reset()">Add News Now</button>
 
         <form
           [style.display]="addButton ? 'block' : 'none'"
@@ -89,14 +107,14 @@
           <button
             type="submit"
             [disabled]="addNewsForm.invalid"
-            (click)="togglebutton()"
-            (click)="addNewsForm.reset()"
+            
+            
           >
             add news
           </button>
         </form>
       }
-    } @else if (user && user.userType === "TeamMember") {
+    } @else if (user && user.userType ==="TeamMember" && user.role==='coach') {
       <ul>
         <li (click)="show = 'addPlayer'">Add Player</li>
         <li (click)="show = 'addManager'">Add Manager</li>
@@ -104,7 +122,7 @@
         <li (click)="show = 'bio'">Bio</li>
       </ul>
       @if (show === "bio") {
-        <img src="user.src" alt="" />
+        <img src="{{user.src}}" alt="" />
         <h2>{{ user.firstName }} {{ user.lastName }}</h2>
         <p>
           contact: <span>{{ user.email }}</span>
@@ -114,9 +132,270 @@
         <p>Age: {{ user.age }}</p>
         <p>Team: {{ user.team }}</p>
         <p>Experience: {{ user.experience }}</p>
-        <button>Delete User</button>
+        <button (click)="deleteUser()">Delete User</button>
+      } @else if (show === "addPlayer") {
+        <form action="" [formGroup]="addPlayerForm" (ngSubmit)="addNewPlayer()">
+          <div>
+            <label for="team">Team</label>
+            <input
+              type="text"
+              id="team"
+              placeholder="e.g: Nekoma"
+              formControlName="team"
+            />
+            @if (addplayerControl.team.dirty && addplayerControl.team.errors) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
+          </div>
+          <div>
+            <label for="position">Position</label>
+            <input
+              type="text"
+              id="position"
+              placeholder="e.g: setter"
+              formControlName="position"
+            />
+            @if (addplayerControl.position.dirty && addplayerControl.position.errors) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
+          </div>
+          <div>
+            <label for="experience">Experience</label>
+            <input
+              type="text"
+              id="experience"
+              placeholder="e.g: 2 years"
+              formControlName="experience"
+            />
+            @if (addplayerControl.experience.dirty && addplayerControl.experience.errors) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
+          </div>
+          <div>
+            <label for="firstName">Firstname</label>
+            <input
+              type="text"
+              id="firstName"
+              placeholder="enter your name"
+              formControlName="firstName"
+            />
+            @if (addplayerControl.firstName.dirty && addplayerControl.firstName.errors) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
+          </div>
+          <div>
+            <label for="lastName">Lastname</label>
+            <input
+              type="text"
+              id="lastName"
+              placeholder="enter your lastname"
+              formControlName="lastName"
+            />
+            @if (addplayerControl.lastName.dirty && addplayerControl.lastName.errors) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="enter your email"
+              formControlName="email"
+            />
+            @if (addplayerControl.email.dirty && addplayerControl.email.errors) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
+          </div>
+          <div>
+            <label for="age">Age</label>
+            <input
+              type="text"
+              id="age"
+              placeholder="enter your age"
+              formControlName="age"
+            />
+            @if (addplayerControl.age.dirty && addplayerControl.age.errors) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
+          </div>
+          <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" formControlName="password" />
+            @if (addplayerControl.password.dirty && addplayerControl.password.errors) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
+          </div>
+          <div>
+            <label for="confirmPassword">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="repeat password"
+              formControlName="confirmPassword"
+            />
+            @if (
+              addplayerControl.confirmPassword.dirty &&
+              addPlayerForm.errors?.["passwordsMatching"]
+            ) {
+              <p>{{ addPlayerForm.errors?.["passwordsMatching"] }}</p>
+            }
+          </div>
+          <div>
+            <label for="src">Profile Image</label>
+            <input type="text" id="src" formControlName="src" />
+          </div>
+          <button type="submit" [disabled]="addPlayerForm.invalid">
+            Register
+          </button>
+        </form>
+      }@else if (show==='addManager') {
+        <form action="" [formGroup]="addManagerForm" (ngSubmit)="addManager()">
+          <div>
+            <label for="team">Team</label>
+            <input
+              type="text"
+              id="team"
+              placeholder="e.g: Nekoma"
+              formControlName="team"
+            />
+            @if (addManagerControl.team.dirty&&addManagerControl.team.errors) {
+                <h2 style="color: red; margin: 0">!</h2>
+              }
+          </div>
+          <div>
+            <label for="experience">Experience</label>
+            <input
+              type="text"
+              id="experience"
+              placeholder="e.g: 2 years"
+              formControlName="experience"
+            />
+            @if (addManagerControl.experience.dirty&&addManagerControl.experience.errors?.["required"]) {
+                <h2 style="color: red; margin: 0">!</h2>
+              }
+            
+          </div>
+          <div>
+            <label for="firstName">Firstname</label>
+            <input
+              type="text"
+              id="firstName"
+              placeholder="enter your name"
+              formControlName="firstName"
+            />
+            @if (addManagerControl.firstName.dirty && addManagerControl.firstName.errors) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
+          </div>
+          <div>
+            <label for="lastName">Lastname</label>
+            <input
+              type="text"
+              id="lastName"
+              placeholder="enter your lastname"
+              formControlName="lastName"
+            />
+            @if (addManagerControl.lastName.dirty && addManagerControl.lastName.errors) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="enter your email"
+              formControlName="email"
+            />
+            @if (addManagerControl.email.dirty && addManagerControl.email.errors) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
+          </div>
+          <div>
+            <label for="age">Age</label>
+            <input
+              type="text"
+              id="age"
+              placeholder="enter your age"
+              formControlName="age"
+            />
+            @if (addManagerControl.age.dirty && addManagerControl.age.errors) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
+          </div>
+          <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" formControlName="password" />
+            @if (addManagerControl.password.dirty && addManagerControl.password.errors) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
+          </div>
+          <div>
+            <label for="confirmPassword">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="repeat password"
+              formControlName="confirmPassword"
+            />
+            @if (
+              addManagerControl.confirmPassword.dirty &&
+              addManagerForm.errors?.["passwordsMatching"]
+            ) {
+              <p>{{ addManagerForm.errors?.["passwordsMatching"] }}</p>
+            }
+          </div>
+          <div>
+            <label for="src">Profile Image</label>
+            <input type="text" id="src" formControlName="src" />
+          </div>
+          <button type="submit" [disabled]="addManagerForm.invalid" (click)="addManagerForm.reset()">Register</button>
+        </form>
       }
+     }
+      
+    @else if (user&&user.userType==='TeamMember'&&user.role==='manager') {
+      <ul>
+        <li (click)="show = 'addPlayer'">Plan Game</li>
+        <li (click)="show = 'addManager'">Make Announcement</li>
+        <li (click)="show = 'manageTeam'">Manage Team</li>
+        <li (click)="show = 'bio'">Bio</li>
+      </ul>
+      @if (show === "bio") {
+        <img src="{{user.src}}" alt="" />
+        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+        <p>
+          contact: <span>{{ user.email }}</span>
+        </p>
+        <p>{{ user.position }}</p>
+        <p>Role: {{ user.role }}</p>
+        <p>Age: {{ user.age }}</p>
+        <p>Team: {{ user.team }}</p>
+        <p>Experience: {{ user.experience }}</p>
+        <button (click)="deleteUser()">Delete User</button>
+      } 
+    }
+    @else if (user&&user.userType==='TeamMember'&&user.role==='player') {
+      <ul>
+        <li>Announcements</li>
+        <li (click)="show = 'games'">Future Games</li>
+        <li (click)="show = 'team'">Your Team</li>
+        <li (click)="show = 'bio'">Bio</li>
+      </ul>
+      @if (show === "bio") {
+        <img [src]="user.src" alt="" />
+        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+        <p>
+          contact: <span>{{ user.email }}</span>
+        </p>
+        <p>{{ user.position }}</p>
+        <p>Role: {{ user.role }}</p>
+        <p>Age: {{ user.age }}</p>
+        <p>Team: {{ user.team }}</p>
+        <p>Experience: {{ user.experience }}</p>
+        <button (click)="deleteUser()">Delete User</button>
+      } 
     }
   </div>
-  <router-outlet></router-outlet>
 </section>

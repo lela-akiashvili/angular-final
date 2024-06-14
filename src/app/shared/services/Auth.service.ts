@@ -10,7 +10,6 @@ import {
 } from '@angular/fire/auth';
 import { UsersFirebaseService } from './UsersFirebase.service';
 import { NewsFirebaseService } from './NewsFirebase.service';
-import { News } from '../../types/news';
 import { User } from '../../types/users';
 import { from, Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
@@ -106,7 +105,7 @@ export class AuthService {
   deleteUser(): Observable<void> {
     const currentUser = this.auth.currentUser;
     if (!currentUser) {
-      return throwError(() => new Error('no nobodu init,mate'));
+      return throwError(() => new Error('no nobody init,mate'));
     }
     const userId = currentUser.uid;
     return this.usersFirebaseService.deleteUser(userId).pipe(

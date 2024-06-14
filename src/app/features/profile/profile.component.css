@@ -99,12 +99,15 @@ span.warning {
   color: red;
   font-size: small;
 }
-.bio {
+
+.bio img {
+  max-height: 60vh;
+}
+@media (min-width:600px){
+  .bio {
   display: flex;
   max-width: fit-content;
   max-height: 60vh;
   margin: auto;
 }
-.bio img {
-  max-height: 60vh;
 }

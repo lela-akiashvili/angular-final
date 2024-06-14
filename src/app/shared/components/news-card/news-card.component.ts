@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { NewsFirebaseService } from '../../services/NewsFirebase.service';
 import { News } from '../../../types/news';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { UsersFirebaseService } from '../../services/UsersFirebase.service';
 import { AuthService } from '../../services/Auth.service';
 
@@ -11,11 +11,9 @@ import { AuthService } from '../../services/Auth.service';
   imports: [RouterLink],
   template: `
     <div>
-      <div class="search">
-        <input type="text"> <button >search</button>
-      </div>
-       
-      @for (news of newsSig(); track news.id) {
+      <div class="search"><input type="text" /> <button>search</button></div>
+
+      @for (news of filteredNews; track news.id) {
         <div class="card">
           <img [src]="news.src" alt="" />
           <span>
@@ -27,7 +25,10 @@ import { AuthService } from '../../services/Auth.service';
               @for (item of news.about; track $index) {
                 <span>{{ item }}, </span>
               }
-              <i class="bi bi-bookmark-heart" (click)="addToFavorites(news.id!)"></i>
+              <i
+                class="bi bi-bookmark-heart"
+                (click)="addToFavorites(news.id!)"
+              ></i>
             </h5>
             <p>{{ news.text }}</p>
           </span>
@@ -41,10 +42,16 @@ export class NewsCardComponent implements OnInit {
   private newsFirebaseService = inject(NewsFirebaseService);
   private usersFirebaseService = inject(UsersFirebaseService);
   private auth = inject(AuthService);
-  newsSig = signal<News[]>([]);
+  private activatedRouter = inject(ActivatedRoute);
+  newsSig = <News[]>[];
+  filteredNews: News[] = [];
   ngOnInit(): void {
     this.newsFirebaseService.getNews().subscribe((news) => {
-      this.newsSig.set(news);
+      this.newsSig = news;
+      this.filterNews(this.activatedRouter.snapshot.queryParams['sport']);
+    });
+    this.activatedRouter.queryParams.subscribe((params) => {
+      this.filterNews(params['sport']);
     });
   }
   addToFavorites(newsId: string): void {
@@ -56,6 +63,17 @@ export class NewsCardComponent implements OnInit {
       });
     } else {
       console.log('user not in my guy what did you expect', newsId);
+    }
+  }
+  filterNews(sport?: string) {
+    if (sport) {
+      this.filteredNews = this.newsSig.filter((newsItem) =>
+        newsItem.about?.includes(sport),
+      );
+      console.log('hi');
+    } else {
+      this.filteredNews = this.newsSig;
+      console.log('bye');
     }
   }
 }

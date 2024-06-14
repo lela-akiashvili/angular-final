@@ -40,4 +40,5 @@ button {
   background-color: rgb(202, 202, 202);
   border: none;
   border-bottom: 1.4px solid red;
+  cursor: pointer;
 }

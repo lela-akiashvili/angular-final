@@ -9,7 +9,6 @@ h4,
 p {
   font-size: small;
 }
-
 .card {
   display: flex;
   max-height: 25vh;
@@ -23,7 +22,6 @@ img {
   max-height: 25vh;
   float: left;
 }
-
 h5 {
   margin: 0;
   font-weight: 500;

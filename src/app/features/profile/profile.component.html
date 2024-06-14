@@ -17,9 +17,8 @@
             </p>
             <p>Age: {{ user.age }}</p>
           </div>
-
-          
-        </div><button (click)="deleteUser()">Delete User</button>
+        </div>
+        <button (click)="deleteUser()">Delete User</button>
       } @else if (show === "favourites") {
         <div class="card-container">
           @for (news of faveNews; track news.title) {
@@ -46,19 +45,19 @@
       } @else if (show === "news") {
         <h2>articles you created</h2>
         <div class="card-container">
-            @for (news of allNews; track news.title) {
-          <div class="card">
-            <img [src]="news.src" alt="" />
-            <h2>{{ news.title }}</h2>
-            <h4>tags: {{ news.about }}</h4>
-            <p>{{ news.text }}</p>
-            <i class="bi bi-trash" (click)="deleteNews(news.id!)"></i>
-          </div>
-        } @empty {
-          <p>you haven't written any news yet</p>
-        }
+          @for (news of allNews; track news.title) {
+            <div class="card">
+              <img [src]="news.src" alt="" />
+              <h2>{{ news.title }}</h2>
+              <h4>tags: {{ news.about }}</h4>
+              <p>{{ news.text }}</p>
+              <i class="bi bi-trash" (click)="deleteNews(news.id!)"></i>
+            </div>
+          } @empty {
+            <p>you haven't written any news yet</p>
+          }
         </div>
-      
+
         <button (click)="togglebutton()" (click)="addNewsForm.reset()">
           Add News Now
         </button>
@@ -408,8 +407,8 @@
       user && user.userType === "TeamMember" && user.role === "manager"
     ) {
       <ul>
-        <li (click)="show = 'addPlayer'">Plan Game</li>
-        <li (click)="show = 'addManager'">Make Announcement</li>
+        <li (click)="show = 'games'">Plan Game</li>
+        <li (click)="show = 'announce'">Make Announcement</li>
         <li (click)="show = 'manageTeam'">Manage Team</li>
         <li (click)="show = 'bio'">Bio</li>
       </ul>
@@ -430,6 +429,74 @@
         </div>
 
         <button (click)="deleteUser()">Delete User</button>
+      } @else if (show === "games") {
+        <form action="" [formGroup]="addGamesForm" (ngSubmit)="addNewGames()">
+          <div>
+            <label for="team1">Your Team</label>
+            <input
+              type="text"
+              id="team1"
+              placeholder="e.g: nekoma"
+              formControlName="team1"
+            />
+            @if (addGamesControl.team1.dirty&&addGamesControl.team1.errors) {
+              <div>!</div>
+            }
+          </div>
+          <div>
+            <label for="src1">Your Team's Logo</label>
+            <input
+              type="text"
+              id="src1"
+              formControlName="src1"
+            /> @if (addGamesControl.src1.dirty&&addGamesControl.src1.errors) {
+              <div>!</div>
+            }
+          </div>
+          <div>
+            <label for="team2">Opponent Team</label>
+            <input
+              type="text"
+              placeholder="e.g: nekoma"
+              id="team2"
+              formControlName="team2"
+            /> @if (addGamesControl.team2.dirty&&addGamesControl.team2.errors) {
+              <div>!</div>
+            }
+          </div>
+          <div>
+            <label for="src2">Opponent Team's Logo</label>
+            <input
+              type="text"
+              id="src2"
+              formControlName="src2"
+            /> @if (addGamesControl.src2.dirty&&addGamesControl.src2.errors) {
+              <span>!</span>
+            }
+          </div>
+          <div>
+            <label for="date">Game Date</label>
+            <input
+              type="date"
+              id="date"
+              formControlName="date"
+            /> @if (addGamesControl.date.dirty&&addGamesControl.date.errors) {
+              <div>!</div>
+            }
+          </div>
+          <div>
+            <label for="address">Stadium</label>
+            <input
+              type="text"
+              id="address"
+              placeholder="e.g: Yoyogi National Stadium"
+              formControlName="address"
+            /> @if (addGamesControl.address.dirty&&addGamesControl.address.errors) {
+              <div>!</div>
+            }
+          </div>
+          <button type="submit" [disabled]="addGamesForm.invalid">Add Game</button>
+        </form>
       }
     } @else if (
       user && user.userType === "TeamMember" && user.role === "player"

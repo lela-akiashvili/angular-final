@@ -1,4 +1,3 @@
-// sign-up.component.ts
 import { Component, OnInit, inject } from '@angular/core';
 import {
   FormBuilder,

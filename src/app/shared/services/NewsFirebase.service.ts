@@ -82,7 +82,4 @@ getNewsById(id:string):Observable<News|null>{
     console.log(id)
     return from(deleteDoc(docRef));
   }
-//   addNewsToFaves(id:string):Observable<News[]>{
-// const q = query(this.newsCollection,where(''))
-//   }
 }

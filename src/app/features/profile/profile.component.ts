@@ -20,6 +20,8 @@ import { News } from '../../types/news';
 import { NewsCardComponent } from '../../shared/components/news-card/news-card.component';
 import { validatePassword } from 'firebase/auth';
 import { routes } from '../../app.routes';
+import { GamesFirebaseService } from '../../shared/services/gamesFirebase.service';
+import { Game } from '../../types/game';
 
 @Component({
   selector: 'app-profile',
@@ -34,6 +36,7 @@ export class ProfileComponent implements OnInit {
   private newsFirebaseService = inject(NewsFirebaseService);
   private auth = inject(AuthService);
   private router = inject(Router);
+  private gamesService = inject(GamesFirebaseService);
   addButton = false;
   togglebutton() {
     this.addButton = !this.addButton;
@@ -50,7 +53,10 @@ export class ProfileComponent implements OnInit {
     | 'addPlayer'
     | 'manageTeam'
     | 'games'
+    | 'announce'
     | 'team' = 'bio';
+
+  private fb = inject(FormBuilder);
   get controls() {
     return this.addNewsForm.controls;
   }
@@ -60,8 +66,9 @@ export class ProfileComponent implements OnInit {
   get addManagerControl() {
     return this.addManagerForm.controls;
   }
-  private fb = inject(FormBuilder);
-
+  get addGamesControl() {
+    return this.addGamesForm.controls;
+  }
   addPlayerForm = this.fb.group({
     role: ['player'],
     team: ['', [Validators.required]],
@@ -94,6 +101,16 @@ export class ProfileComponent implements OnInit {
     src: ['', [Validators.required, Validators.minLength(7)]],
     date: [new Date(), [Validators.required]],
   });
+  addGamesForm = this.fb.group({
+    team1: ['', [Validators.required]],
+    src1: ['', [Validators.required]],
+    team2: ['', [Validators.required]],
+    src2: ['', [Validators.required]],
+    date: [new Date(), [Validators.required]],
+    address: ['', [Validators.required, Validators.minLength(5)]],
+    tickets: [20, [Validators.required]],
+  });
+
   ngOnInit(): void {
     this.activatedRoutes.paramMap.subscribe((paramMap) => {
       const userId = paramMap.get('uid');
@@ -134,11 +151,38 @@ export class ProfileComponent implements OnInit {
           const newNews: News = { id: newId, ...news };
           this.allNews.push(newNews);
           console.log('Added new news with ID:', newId);
+          // this.addNewsForm.reset();
         },
         (error) => {
           console.log('Cannot add new news', error);
         },
       );
+    }
+  }
+  addNewGames() {
+    if (this.addGamesForm.valid && this.user) {
+      const gameData: Game = {
+        team1: this.addGamesForm.value.team1 as string,
+        src1: this.addGamesForm.value.src1 as string,
+        team2: this.addGamesForm.value.team2 as string,
+        src2: this.addGamesForm.value.src2 as string,
+        date: this.addGamesForm.value.date as Date | null,
+        address: this.addGamesForm.value.address as string,
+        tickets: this.addGamesForm.value.tickets as number | null,
+      };
+
+      this.gamesService.addGames(gameData).subscribe({
+        next: (docId) => {
+          console.log('Game added:', docId);
+          this.addGamesForm.reset();
+
+        },
+        error: (error) => {
+          console.error('Error adding game:', error);
+        },
+      });
+    }else{
+      console.log('there is a problem')
     }
   }
   deleteNews(id: string) {
@@ -218,7 +262,6 @@ export class ProfileComponent implements OnInit {
       },
     });
   }
-
   loadFavoriteNews(userId: string): void {
     this.usersFirebaseService.getFavorites(userId).subscribe({
       next: (favoriteIds) => {

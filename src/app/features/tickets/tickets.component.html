@@ -1,1 +1,27 @@
-<p>tickets works!</p>
+<section>
+  <h1>Upcoming Games</h1>
+  <div class="card-container">
+    @for (game of gamesSig(); track game.team1) {
+      <div class="card">
+        <div class="titles">
+          <div class="team">
+            <img [src]="game.src1" alt="{{ game.src1 }}" />
+            <h2>{{ game.team1 }}</h2>
+          </div>
+          <h2>VS</h2>
+          <div class="team">
+            <img [src]="game.src2" alt="{{ game.src2 }}" />
+            <h2>{{ game.team2 }}</h2>
+          </div>
+        </div>
+
+        <h3>Date: {{ game.date }}</h3>
+        <h3>Stadium: {{ game.address }}</h3>
+        <h3>
+          Tickets Left: {{ game.tickets }}
+          <i class="bi bi-ticket-perforated"></i>
+        </h3>
+      </div>
+    }
+  </div>
+</section>

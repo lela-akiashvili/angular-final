@@ -11,6 +11,10 @@ import { AuthService } from '../../services/Auth.service';
   imports: [RouterLink],
   template: `
     <div>
+      <div class="search">
+        <input type="text"> <button >search</button>
+      </div>
+       
       @for (news of newsSig(); track news.id) {
         <div class="card">
           <img [src]="news.src" alt="" />
@@ -41,7 +45,6 @@ export class NewsCardComponent implements OnInit {
   ngOnInit(): void {
     this.newsFirebaseService.getNews().subscribe((news) => {
       this.newsSig.set(news);
-      // console.log(this.newsSig());
     });
   }
   addToFavorites(newsId: string): void {

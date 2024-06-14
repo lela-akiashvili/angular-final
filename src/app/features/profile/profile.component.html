@@ -8,37 +8,45 @@
         <li (click)="show = 'bio'">Bio</li>
       </ul>
       @if (show === "bio") {
-        <img [src]="user.src" alt="" />
-        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-        <p>
-          contact: <span>{{ user.email }}</span>
-        </p>
-        <p>Age: {{ user.age }}</p>
-        <button (click)="deleteUser()">Delete User</button>
-      } @else if (show === "favourites") {
-        <div>    @for (news of faveNews; track news.title) {
-          <div class="card">
-            <img [src]="news.src" alt="" />
-            <span>
-              <h4>
-                <a routerLink="/news-page/{{ news.id }}">{{ news.title }}</a>
-              </h4>
-              <h5 class="about">
-                tags:
-                @for (item of news.about; track $index) {
-                  <span>{{ item }}, </span>
-                }
-                <i class="bi bi-bookmark-heart"></i>
-              </h5>
-              <p>{{ news.text }}</p>
-            </span>
+        <div class="bio">
+          <img [src]="user.src" alt="" />
+          <div>
+            <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+            <p>
+              contact: <span>{{ user.email }}</span>
+            </p>
+            <p>Age: {{ user.age }}</p>
           </div>
-        }</div>
+
+          
+        </div><button (click)="deleteUser()">Delete User</button>
+      } @else if (show === "favourites") {
+        <div class="card-container">
+          @for (news of faveNews; track news.title) {
+            <div class="card favourites">
+              <img [src]="news.src" alt="" />
+              <span>
+                <h4>
+                  {{ news.title }}
+                </h4>
+                <h5 class="about">
+                  tags:
+                  @for (item of news.about; track $index) {
+                    <span>{{ item }}, </span>
+                  }
+                  <i class="bi bi-bookmark-heart"></i>
+                </h5>
+                <p>{{ news.text }}</p>
+              </span>
+            </div>
+          }
+        </div>
       } @else if (show === "tickets") {
         <div>bye</div>
       } @else if (show === "news") {
         <h2>articles you created</h2>
-        @for (news of allNews; track news.title) {
+        <div class="card-container">
+            @for (news of allNews; track news.title) {
           <div class="card">
             <img [src]="news.src" alt="" />
             <h2>{{ news.title }}</h2>
@@ -49,7 +57,11 @@
         } @empty {
           <p>you haven't written any news yet</p>
         }
-        <button (click)="togglebutton()" (click)="addNewsForm.reset()">Add News Now</button>
+        </div>
+      
+        <button (click)="togglebutton()" (click)="addNewsForm.reset()">
+          Add News Now
+        </button>
 
         <form
           [style.display]="addButton ? 'block' : 'none'"
@@ -104,17 +116,14 @@
               <p>bbg fill in the field</p>
             }
           </div>
-          <button
-            type="submit"
-            [disabled]="addNewsForm.invalid"
-            
-            
-          >
+          <button type="submit" [disabled]="addNewsForm.invalid">
             add news
           </button>
         </form>
       }
-    } @else if (user && user.userType ==="TeamMember" && user.role==='coach') {
+    } @else if (
+      user && user.userType === "TeamMember" && user.role === "coach"
+    ) {
       <ul>
         <li (click)="show = 'addPlayer'">Add Player</li>
         <li (click)="show = 'addManager'">Add Manager</li>
@@ -122,16 +131,20 @@
         <li (click)="show = 'bio'">Bio</li>
       </ul>
       @if (show === "bio") {
-        <img src="{{user.src}}" alt="" />
-        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-        <p>
-          contact: <span>{{ user.email }}</span>
-        </p>
-        <p>{{ user.position }}</p>
-        <p>Role: {{ user.role }}</p>
-        <p>Age: {{ user.age }}</p>
-        <p>Team: {{ user.team }}</p>
-        <p>Experience: {{ user.experience }}</p>
+        <div class="bio">
+          <img src="{{ user.src }}" alt="" />
+          <div>
+            <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+            <p>
+              contact: <span>{{ user.email }}</span>
+            </p>
+            <p>{{ user.position }}</p>
+            <p>Role: {{ user.role }}</p>
+            <p>Age: {{ user.age }}</p>
+            <p>Team: {{ user.team }}</p>
+            <p>Experience: {{ user.experience }}</p>
+          </div>
+        </div>
         <button (click)="deleteUser()">Delete User</button>
       } @else if (show === "addPlayer") {
         <form action="" [formGroup]="addPlayerForm" (ngSubmit)="addNewPlayer()">
@@ -155,7 +168,10 @@
               placeholder="e.g: setter"
               formControlName="position"
             />
-            @if (addplayerControl.position.dirty && addplayerControl.position.errors) {
+            @if (
+              addplayerControl.position.dirty &&
+              addplayerControl.position.errors
+            ) {
               <h2 style="color: red; margin: 0">!</h2>
             }
           </div>
@@ -167,7 +183,10 @@
               placeholder="e.g: 2 years"
               formControlName="experience"
             />
-            @if (addplayerControl.experience.dirty && addplayerControl.experience.errors) {
+            @if (
+              addplayerControl.experience.dirty &&
+              addplayerControl.experience.errors
+            ) {
               <h2 style="color: red; margin: 0">!</h2>
             }
           </div>
@@ -179,7 +198,10 @@
               placeholder="enter your name"
               formControlName="firstName"
             />
-            @if (addplayerControl.firstName.dirty && addplayerControl.firstName.errors) {
+            @if (
+              addplayerControl.firstName.dirty &&
+              addplayerControl.firstName.errors
+            ) {
               <h2 style="color: red; margin: 0">!</h2>
             }
           </div>
@@ -191,7 +213,10 @@
               placeholder="enter your lastname"
               formControlName="lastName"
             />
-            @if (addplayerControl.lastName.dirty && addplayerControl.lastName.errors) {
+            @if (
+              addplayerControl.lastName.dirty &&
+              addplayerControl.lastName.errors
+            ) {
               <h2 style="color: red; margin: 0">!</h2>
             }
           </div>
@@ -203,7 +228,9 @@
               placeholder="enter your email"
               formControlName="email"
             />
-            @if (addplayerControl.email.dirty && addplayerControl.email.errors) {
+            @if (
+              addplayerControl.email.dirty && addplayerControl.email.errors
+            ) {
               <h2 style="color: red; margin: 0">!</h2>
             }
           </div>
@@ -222,7 +249,10 @@
           <div>
             <label for="password">Password</label>
             <input type="password" id="password" formControlName="password" />
-            @if (addplayerControl.password.dirty && addplayerControl.password.errors) {
+            @if (
+              addplayerControl.password.dirty &&
+              addplayerControl.password.errors
+            ) {
               <h2 style="color: red; margin: 0">!</h2>
             }
           </div>
@@ -249,7 +279,7 @@
             Register
           </button>
         </form>
-      }@else if (show==='addManager') {
+      } @else if (show === "addManager") {
         <form action="" [formGroup]="addManagerForm" (ngSubmit)="addManager()">
           <div>
             <label for="team">Team</label>
@@ -259,9 +289,11 @@
               placeholder="e.g: Nekoma"
               formControlName="team"
             />
-            @if (addManagerControl.team.dirty&&addManagerControl.team.errors) {
-                <h2 style="color: red; margin: 0">!</h2>
-              }
+            @if (
+              addManagerControl.team.dirty && addManagerControl.team.errors
+            ) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
           </div>
           <div>
             <label for="experience">Experience</label>
@@ -271,10 +303,12 @@
               placeholder="e.g: 2 years"
               formControlName="experience"
             />
-            @if (addManagerControl.experience.dirty&&addManagerControl.experience.errors?.["required"]) {
-                <h2 style="color: red; margin: 0">!</h2>
-              }
-            
+            @if (
+              addManagerControl.experience.dirty &&
+              addManagerControl.experience.errors?.["required"]
+            ) {
+              <h2 style="color: red; margin: 0">!</h2>
+            }
           </div>
           <div>
             <label for="firstName">Firstname</label>
@@ -284,7 +318,10 @@
               placeholder="enter your name"
               formControlName="firstName"
             />
-            @if (addManagerControl.firstName.dirty && addManagerControl.firstName.errors) {
+            @if (
+              addManagerControl.firstName.dirty &&
+              addManagerControl.firstName.errors
+            ) {
               <h2 style="color: red; margin: 0">!</h2>
             }
           </div>
@@ -296,7 +333,10 @@
               placeholder="enter your lastname"
               formControlName="lastName"
             />
-            @if (addManagerControl.lastName.dirty && addManagerControl.lastName.errors) {
+            @if (
+              addManagerControl.lastName.dirty &&
+              addManagerControl.lastName.errors
+            ) {
               <h2 style="color: red; margin: 0">!</h2>
             }
           </div>
@@ -308,7 +348,9 @@
               placeholder="enter your email"
               formControlName="email"
             />
-            @if (addManagerControl.email.dirty && addManagerControl.email.errors) {
+            @if (
+              addManagerControl.email.dirty && addManagerControl.email.errors
+            ) {
               <h2 style="color: red; margin: 0">!</h2>
             }
           </div>
@@ -327,7 +369,10 @@
           <div>
             <label for="password">Password</label>
             <input type="password" id="password" formControlName="password" />
-            @if (addManagerControl.password.dirty && addManagerControl.password.errors) {
+            @if (
+              addManagerControl.password.dirty &&
+              addManagerControl.password.errors
+            ) {
               <h2 style="color: red; margin: 0">!</h2>
             }
           </div>
@@ -350,12 +395,18 @@
             <label for="src">Profile Image</label>
             <input type="text" id="src" formControlName="src" />
           </div>
-          <button type="submit" [disabled]="addManagerForm.invalid" (click)="addManagerForm.reset()">Register</button>
+          <button
+            type="submit"
+            [disabled]="addManagerForm.invalid"
+            (click)="addManagerForm.reset()"
+          >
+            Register
+          </button>
         </form>
       }
-     }
-      
-    @else if (user&&user.userType==='TeamMember'&&user.role==='manager') {
+    } @else if (
+      user && user.userType === "TeamMember" && user.role === "manager"
+    ) {
       <ul>
         <li (click)="show = 'addPlayer'">Plan Game</li>
         <li (click)="show = 'addManager'">Make Announcement</li>
@@ -363,20 +414,26 @@
         <li (click)="show = 'bio'">Bio</li>
       </ul>
       @if (show === "bio") {
-        <img src="{{user.src}}" alt="" />
-        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-        <p>
-          contact: <span>{{ user.email }}</span>
-        </p>
-        <p>{{ user.position }}</p>
-        <p>Role: {{ user.role }}</p>
-        <p>Age: {{ user.age }}</p>
-        <p>Team: {{ user.team }}</p>
-        <p>Experience: {{ user.experience }}</p>
+        <div class="bio">
+          <img src="{{ user.src }}" alt="" />
+          <div>
+            <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+            <p>
+              contact: <span>{{ user.email }}</span>
+            </p>
+            <p>{{ user.position }}</p>
+            <p>Role: {{ user.role }}</p>
+            <p>Age: {{ user.age }}</p>
+            <p>Team: {{ user.team }}</p>
+            <p>Experience: {{ user.experience }}</p>
+          </div>
+        </div>
+
         <button (click)="deleteUser()">Delete User</button>
-      } 
-    }
-    @else if (user&&user.userType==='TeamMember'&&user.role==='player') {
+      }
+    } @else if (
+      user && user.userType === "TeamMember" && user.role === "player"
+    ) {
       <ul>
         <li>Announcements</li>
         <li (click)="show = 'games'">Future Games</li>
@@ -395,7 +452,7 @@
         <p>Team: {{ user.team }}</p>
         <p>Experience: {{ user.experience }}</p>
         <button (click)="deleteUser()">Delete User</button>
-      } 
+      }
     }
   </div>
 </section>

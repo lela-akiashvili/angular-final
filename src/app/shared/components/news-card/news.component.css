@@ -47,3 +47,25 @@ i {
   color: red;
   font-size: medium;
 }
+div.search{
+  display: flex;
+  margin: auto;
+  gap: 0;
+}
+input{
+  padding: 10px ;
+  border-radius: 25px;
+  margin: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border: 1.5px solid rgb(139, 139, 
+139);
+outline: none;
+}
+button{
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  background-color: red;
+  border: none;
+  color: white;
+}

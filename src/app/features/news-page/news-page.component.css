@@ -29,3 +29,8 @@ p {
   text-align: justify;
   line-height: 1.5;
 }
+@media (min-width:900px) {
+section{
+  padding: 1rem 9rem;
+}
+}

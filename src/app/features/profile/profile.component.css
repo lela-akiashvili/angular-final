@@ -1,92 +1,110 @@
-section{
-padding: 1rem 0.5rem;
+section {
+  padding: 1rem 0.5rem;
 }
 
-ul{
-    list-style: none;
-    padding: 7px 2px;
-    display: flex;
-    /* gap: 1rem; */
-    max-width: fit-content;
-    margin: auto;
-    justify-content: center;
+ul {
+  list-style: none;
+  padding: 7px 2px;
+  display: flex;
+  /* gap: 1rem; */
+  max-width: fit-content;
+  margin: auto;
+  justify-content: center;
   background-color: rgb(204, 204, 204);
   border-bottom: 1px solid red;
-
-
 }
-li{
-    padding: 0 8px;
-    border-right: 1px solid red;
+li {
+  padding: 0 8px;
+  border-right: 1px solid red;
 }
-li:hover{
-    text-decoration: underline;
-    cursor: pointer;
+li:hover {
+  text-decoration: underline;
+  cursor: pointer;
   background-color: rgb(231, 231, 231);
-
 }
-li:last-child{
-    border: none;
+li:last-child {
+  border: none;
 }
-span{
-    font-style: italic;
+span {
+  font-style: italic;
 }
-h2,span{
-    text-transform: capitalize;
+h2,
+span {
+  text-transform: capitalize;
 }
-.card{
-    margin-top: 1rem;
-    max-width: fit-content;
-    background-color: rgb(234, 233, 233);
-    border-radius: 5px;
-    overflow: hidden;
-    
+@media (min-width:900px) {
+    .card-container {
+ padding: 0 9rem;
 }
-img{
-    max-width: 100%;
 }
-i{
-   float: right;
-   padding: 0  0.7rem 0.5rem 0;
-   font-size: 1.4rem;
+h2{
+    text-align: center;
 }
-button{
-    background-color: rgb(231, 231, 231);
-    border: 1px solid red;
-    padding: 10px 15px;
-    margin: 1rem auto;
-    display: flex;
+.card {
+  margin-top: 1rem;
+  /* max-width: 40vw; */
+  background-color: rgb(234, 233, 233);
+  border-radius: 5px;
+  overflow: hidden;
 }
-button:hover{
-    cursor: pointer;
-    background-color: rgb(192, 192, 192);
-    color: white;
+img {
+  max-width: 100%;
 }
-h2, h3, h4,p{
-    padding: 0 1rem;
+i {
+  float: right;
+  padding: 0 0.7rem 0.5rem 0;
+  font-size: 1.4rem;
 }
-p{
-    margin-bottom: 0;
+button {
+  background-color: rgb(231, 231, 231);
+  border: 1px solid red;
+  padding: 10px 15px;
+  margin: 1rem auto;
+  display: flex;
 }
-form{
-    margin: auto;
-    max-width: fit-content;
+button:hover {
+  cursor: pointer;
+  background-color: rgb(192, 192, 192);
+  color: white;
 }
-form div{
-    display: grid;
-    gap: 0.7rem;
-    margin-top: 1rem ;
-   /* margin: auto; */
+h2,
+h3,
+h4,
+p {
+  padding: 0 1rem;
 }
-input,textarea{
-    max-width: fit-content;
-    padding: 10px;
-    border-radius: 25px;
-    outline: none;
-border: 1.5px solid rgb(69, 69, 69);
-background-color:rgb(241, 241, 241);
+p {
+  margin-bottom: 0;
 }
-span.warning{
-    color: red;
-    font-size: small;
+form {
+  margin: auto;
+  max-width: fit-content;
+}
+form div {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1rem;
+  /* margin: auto; */
+}
+input,
+textarea {
+  max-width: fit-content;
+  padding: 10px;
+  border-radius: 25px;
+  outline: none;
+  border: 1.5px solid rgb(69, 69, 69);
+  background-color: rgb(241, 241, 241);
+}
+span.warning {
+  color: red;
+  font-size: small;
+}
+.bio {
+  display: flex;
+  max-width: fit-content;
+  max-height: 60vh;
+  margin: auto;
+}
+.bio img {
+  max-height: 60vh;
 }

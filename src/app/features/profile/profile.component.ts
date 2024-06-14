@@ -50,7 +50,7 @@ export class ProfileComponent implements OnInit {
     | 'addPlayer'
     | 'manageTeam'
     | 'games'
-    | 'team' = 'favourites';
+    | 'team' = 'bio';
   get controls() {
     return this.addNewsForm.controls;
   }

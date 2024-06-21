@@ -1,5 +1,7 @@
 <section>
   <h1>Upcoming Games</h1>
+  <div class="search"><input type="text" /> <button>search</button></div>
+
   <div class="card-container">
     @for (game of gamesSig(); track game.team1) {
       <div class="card">
@@ -15,7 +17,8 @@
           </div>
         </div>
 
-        <h3>Date: {{ game.date }}</h3>
+        <h3>Date: {{ game.date |date:'mediumDate'}}</h3>
+        <h3>Time: {{ game.date |date:'mediumTime'}}</h3>
         <h3>Stadium: {{ game.address }}</h3>
         <h3>
           Tickets Left: {{ game.tickets }}

@@ -1,12 +1,17 @@
 section {
-  padding: 1rem 0.5rem;
+  padding: 7rem 0.5rem 1rem 0.5rem;
 }
-
+/* .announce{
+  padding-top: 1rem;
+} */
+.announcements-card{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
 ul {
   list-style: none;
   padding: 7px 2px;
   display: flex;
-  /* gap: 1rem; */
   max-width: fit-content;
   margin: auto;
   justify-content: center;
@@ -42,7 +47,6 @@ h2{
 }
 .card {
   margin-top: 1rem;
-  /* max-width: 40vw; */
   background-color: rgb(234, 233, 233);
   border-radius: 5px;
   overflow: hidden;
@@ -84,10 +88,9 @@ form div {
   display: grid;
   gap: 0.7rem;
   margin-top: 1rem;
-  /* margin: auto; */
 }
 input,
-textarea {
+textarea,select {
   max-width: fit-content;
   padding: 10px;
   border-radius: 25px;
@@ -102,6 +105,50 @@ span.warning {
 
 .bio img {
   max-height: 60vh;
+}
+
+.announcement{
+  background-color: rgb(231, 231, 231);
+  border-radius: 5px;
+  padding: 1rem 0;
+  margin: 1rem 0 0 0;
+  text-transform: capitalize;
+  border: 1px solid red;
+}
+.announcement h3{
+  margin-top: 0;
+}
+.announcement h3.note{
+  margin-top: 1rem;
+ 
+}
+.line{
+ border-top: 1px solid red;
+ padding-top: 10px;
+}
+.high{
+  background-color: red;
+  color:white;
+  text-align: center;
+}
+.high::after{
+  content: '!';
+}
+.low{
+  background-color: green;
+  color:white;
+  text-align: center;
+}
+.medium{
+  background-color: blue;
+  color:white;
+  text-align: center;
+}
+p>span{
+ font-size: 1.2rem;
+}
+.date>i{
+  padding: 0;
 }
 @media (min-width:600px){
   .bio {

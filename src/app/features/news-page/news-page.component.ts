@@ -2,7 +2,6 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NewsFirebaseService } from '../../shared/services/NewsFirebase.service';
 import { News } from '../../types/news';
-
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -11,16 +10,25 @@ import { DatePipe } from '@angular/common';
   imports: [DatePipe],
   template: `<section>
     @if (newsPage) {
-      <img [src]="newsPage.src" alt="" />
-      <h1>{{ newsPage.title }}</h1>
-      <h3>
-        tags:
-        @for (tag of newsPage.about; track $index) {
-          <span> {{ tag }}</span
-          >,
-        }
-      </h3>
-      <p>{{ newsPage.text }}</p>
+      <div class="all"><h4>Published: 
+        <span>
+          {{newsPage.date}}
+        </span></h4>
+          <h4>
+            Tags:
+            @for (tag of newsPage.about; track $index) {
+              <span> {{ tag }}</span
+              >,
+            }
+          </h4>
+        <img [src]="newsPage.src" alt="" />
+        <div>
+          <h1>{{ newsPage.title }}</h1>
+
+          
+          <p>{{ newsPage.text }}</p>
+        </div>
+      </div>
     }
   </section> `,
   styleUrl: './news-page.component.css',

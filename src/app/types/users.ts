@@ -7,7 +7,7 @@ export interface User {
   src?: string;
   userType: 'regularUser'|'TeamMember';
   role?: string;
-  team?: string;
+  team: string;
   experience?: string;
   position?: string;
   id?: string;

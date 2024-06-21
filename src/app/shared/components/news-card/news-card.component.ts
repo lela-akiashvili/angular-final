@@ -9,10 +9,10 @@ import { AuthService } from '../../services/Auth.service';
   selector: 'app-news-card',
   standalone: true,
   imports: [RouterLink],
-  template: `
-    <div>
-      <div class="search"><input type="text" /> <button>search</button></div>
-
+  template: `<div class="search">
+      <input type="text" /> <button>Search</button>
+    </div>
+    <div class="card-container">
       @for (news of filteredNews; track news.id) {
         <div class="card">
           <img [src]="news.src" alt="" />
@@ -30,12 +30,11 @@ import { AuthService } from '../../services/Auth.service';
                 (click)="addToFavorites(news.id!)"
               ></i>
             </h5>
-            <p>{{ news.text }}</p>
+            <!-- <p>{{ news.text }}</p> -->
           </span>
         </div>
       }
-    </div>
-  `,
+    </div> `,
   styleUrl: `./news.component.css`,
 })
 export class NewsCardComponent implements OnInit {
@@ -43,7 +42,7 @@ export class NewsCardComponent implements OnInit {
   private usersFirebaseService = inject(UsersFirebaseService);
   private auth = inject(AuthService);
   private activatedRouter = inject(ActivatedRoute);
-  newsSig = <News[]>[];
+  newsSig:News[]=[];
   filteredNews: News[] = [];
   ngOnInit(): void {
     this.newsFirebaseService.getNews().subscribe((news) => {
@@ -73,7 +72,6 @@ export class NewsCardComponent implements OnInit {
       console.log('hi');
     } else {
       this.filteredNews = this.newsSig;
-      console.log('bye');
     }
   }
 }

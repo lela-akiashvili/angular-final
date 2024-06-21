@@ -12,31 +12,34 @@ import { UsersFirebaseService } from './UsersFirebase.service';
 import { NewsFirebaseService } from './NewsFirebase.service';
 import { User } from '../../types/users';
 import { from, Observable, BehaviorSubject, throwError } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, switchMap, tap,filter } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private auth = inject(Auth);
   private usersFirebaseService = inject(UsersFirebaseService);
   private newsFirebaseService = inject(NewsFirebaseService);
-  private signedInSubject = new BehaviorSubject<boolean>(false);
-  private currentUserIdSubject = new BehaviorSubject<string | null>(null);
-
-  get signedIn$() {
-    return this.signedInSubject.asObservable();
-  }
-
-  get currentUserId$() {
-    return this.currentUserIdSubject.asObservable();
-  }
-
+  signedIn$ = new BehaviorSubject<boolean>(false);
+  currentUserId$ = new BehaviorSubject<string | null>(null);
+  currentUserTeam$ = new BehaviorSubject<string | null>(
+    localStorage.getItem('currentUserTeam'),
+  );
   constructor() {
     this.auth.onAuthStateChanged((user) => {
-      this.signedInSubject.next(!!user);
-      this.currentUserIdSubject.next(user ? user.uid : null);
+      this.signedIn$.next(!!user);
+      this.currentUserId$.next(user ? user.uid : null);
+      if (user) {
+        this.fetchUserTeam(user.uid);
+      }
     });
   }
-
+  private fetchUserTeam(userId: string) {
+    this.usersFirebaseService.getUserById(userId).subscribe((user) => {
+      const team= user.team.toLowerCase();
+      this.currentUserTeam$.next(team);
+      localStorage.setItem('currentUserTeam', team);
+    });
+  }
   registerUser(
     email: string,
     password: string,
@@ -55,7 +58,7 @@ export class AuthService {
           switchMap(() => from(sendEmailVerification(userCredential.user))),
           switchMap(() => from([userCredential])),
           tap(() => {
-            this.currentUserIdSubject.next(uid);
+            this.currentUserId$.next(uid);
             // gtfo bish, it's not ur time yet
             this.signOutUser().subscribe();
           }),
@@ -63,9 +66,11 @@ export class AuthService {
       }),
     );
   }
-
+  getUserTeam(): Observable<string | null> {
+    return this.currentUserTeam$.asObservable().pipe(filter((team) => team !== null));
+  }
   signInUser(email: string, password: string): Observable<UserCredential> {
-    if (this.signedInSubject.value) {
+    if (this.signedIn$.value) {
       alert('User already signed in');
       return throwError(() => new Error('User already signed in'));
     }
@@ -79,8 +84,9 @@ export class AuthService {
           );
         }
 
-        this.signedInSubject.next(true);
-        this.currentUserIdSubject.next(userCredential.user.uid);
+        this.signedIn$.next(true);
+        this.currentUserId$.next(userCredential.user.uid);
+        this.fetchUserTeam(userCredential.user.uid);
         return from([userCredential]);
       }),
     );
@@ -89,19 +95,22 @@ export class AuthService {
   signOutUser(): Observable<void> {
     return from(signOut(this.auth)).pipe(
       tap(() => {
-        this.signedInSubject.next(false);
-        this.currentUserIdSubject.next(null);
+        this.signedIn$.next(false);
+        this.currentUserId$.next(null);
+        this.currentUserTeam$.next(null);
+        localStorage.removeItem('currentUserTeam');
       }),
     );
   }
 
   isSignedIn(): boolean {
-    return this.signedInSubject.value;
+    return this.signedIn$.value;
   }
 
   getCurrentUserId(): string | null {
-    return this.currentUserIdSubject.value;
+    return this.currentUserId$.value;
   }
+
   deleteUser(): Observable<void> {
     const currentUser = this.auth.currentUser;
     if (!currentUser) {
@@ -111,8 +120,8 @@ export class AuthService {
     return this.usersFirebaseService.deleteUser(userId).pipe(
       switchMap(() => from(deleteUser(currentUser))),
       tap(() => {
-        this.signedInSubject.next(false);
-        this.currentUserIdSubject.next(null);
+        this.signedIn$.next(false);
+        this.currentUserId$.next(null);
       }),
       catchError((error) => {
         console.log("something's not right", error);

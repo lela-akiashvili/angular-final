@@ -4,6 +4,7 @@ form {
   padding: 5px 0;
   text-align: center;
   min-height: 100vh;
+  padding-top: 7rem;
 }
 div {
   max-width: fit-content;
@@ -14,9 +15,10 @@ div {
 }
 input::placeholder {
   font-style: italic;
+  padding-left: 1rem;
 }
 input {
-  padding: 6px 6px 6px 10px;
+  padding: 6px 6px 6px 17px;
   border-radius: 8px;
   border: none;
   outline: none;

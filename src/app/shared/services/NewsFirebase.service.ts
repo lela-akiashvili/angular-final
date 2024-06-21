@@ -4,15 +4,11 @@ import {
   collection,
   collectionData,
   doc,
-  docData,
-  docSnapshots,
   getDoc,
-  setDoc,
   addDoc,
   query,
   where,
   getDocs,
-  QuerySnapshot,
 } from '@angular/fire/firestore';
 import { Observable, from, map } from 'rxjs';
 import { News } from '../../types/news';
@@ -48,7 +44,6 @@ getNewsById(id:string):Observable<News|null>{
   const docRef = doc(this.firestore, `news/${id}`);
   const docSnapPromise = getDoc(docRef).then((docSnap)=>{
     if(docSnap.exists()){
-      console.log(docSnap.data());
       return docSnap.data() as News;
     }else{
       return null
@@ -79,7 +74,7 @@ getNewsById(id:string):Observable<News|null>{
   }
   deleteNews(id: string): Observable<void> {
     const docRef = doc(this.firestore, `news/${id}`);
-    console.log(id)
+   
     return from(deleteDoc(docRef));
   }
 }

@@ -1,36 +1,27 @@
-section {
-  padding: 2rem 0.4rem;
-  overflow: hidden;
+section{
+  padding: 5rem 1rem 1rem 1rem;
 }
-img {
-  max-width: 100%;
-  border-radius: 15px;
+img{
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 0 3px 1px black;
 }
-h1 {
-  font-size: large;
+h4{
+  text-align: right;
+  font-weight: 300;
+  text-transform: capitalize;
+
+  /* margin: 1rem; */
+}
+span{
+  text-transform: capitalize;
+  font-style: italic;
+  font-weight: 500;
+}
+h1{
   text-align: center;
-  padding: 0 10px;
-  margin: 2rem 0;
   text-transform: capitalize;
 }
-h3 {
-  text-align: right;
-  font-size: medium;
-  font-style: italic;
-
-  margin-top: 0;
-  font-weight: 600;
-}
-span:hover {
-  text-decoration: underline;
-}
-p {
-  padding: 0 10px;
-  text-align: justify;
-  line-height: 1.5;
-}
-@media (min-width:900px) {
-section{
-  padding: 1rem 9rem;
-}
+p{
+text-align: justify;
 }

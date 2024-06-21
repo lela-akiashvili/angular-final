@@ -1,6 +1,6 @@
 <section>
   <div>
-    @if (user && user.userType === "regularUser") {
+    <!-- @if (user && user.userType === "regularUser") {
       <ul>
         <li (click)="show = 'news'">Your News</li>
         <li (click)="show = 'favourites'">Favourites</li>
@@ -120,7 +120,8 @@
           </button>
         </form>
       }
-    } @else if (
+    } -->
+    <!-- @else if (
       user && user.userType === "TeamMember" && user.role === "coach"
     ) {
       <ul>
@@ -403,9 +404,8 @@
           </button>
         </form>
       }
-    } @else if (
-      user && user.userType === "TeamMember" && user.role === "manager"
-    ) {
+    }  -->
+    @if (user && user.userType === "TeamMember" && user.role === "manager") {
       <ul>
         <li (click)="show = 'games'">Plan Game</li>
         <li (click)="show = 'announce'">Make Announcement</li>
@@ -439,17 +439,14 @@
               placeholder="e.g: nekoma"
               formControlName="team1"
             />
-            @if (addGamesControl.team1.dirty&&addGamesControl.team1.errors) {
+            @if (addGamesControl.team1.dirty && addGamesControl.team1.errors) {
               <div>!</div>
             }
           </div>
           <div>
             <label for="src1">Your Team's Logo</label>
-            <input
-              type="text"
-              id="src1"
-              formControlName="src1"
-            /> @if (addGamesControl.src1.dirty&&addGamesControl.src1.errors) {
+            <input type="text" id="src1" formControlName="src1" />
+            @if (addGamesControl.src1.dirty && addGamesControl.src1.errors) {
               <div>!</div>
             }
           </div>
@@ -460,27 +457,22 @@
               placeholder="e.g: nekoma"
               id="team2"
               formControlName="team2"
-            /> @if (addGamesControl.team2.dirty&&addGamesControl.team2.errors) {
+            />
+            @if (addGamesControl.team2.dirty && addGamesControl.team2.errors) {
               <div>!</div>
             }
           </div>
           <div>
             <label for="src2">Opponent Team's Logo</label>
-            <input
-              type="text"
-              id="src2"
-              formControlName="src2"
-            /> @if (addGamesControl.src2.dirty&&addGamesControl.src2.errors) {
+            <input type="text" id="src2" formControlName="src2" />
+            @if (addGamesControl.src2.dirty && addGamesControl.src2.errors) {
               <span>!</span>
             }
           </div>
           <div>
             <label for="date">Game Date</label>
-            <input
-              type="date"
-              id="date"
-              formControlName="date"
-            /> @if (addGamesControl.date.dirty&&addGamesControl.date.errors) {
+            <input type="date" id="date" formControlName="date" />
+            @if (addGamesControl.date.dirty && addGamesControl.date.errors) {
               <div>!</div>
             }
           </div>
@@ -491,18 +483,84 @@
               id="address"
               placeholder="e.g: Yoyogi National Stadium"
               formControlName="address"
-            /> @if (addGamesControl.address.dirty&&addGamesControl.address.errors) {
+            />
+            @if (
+              addGamesControl.address.dirty && addGamesControl.address.errors
+            ) {
               <div>!</div>
             }
           </div>
-          <button type="submit" [disabled]="addGamesForm.invalid">Add Game</button>
+          <button type="submit" [disabled]="addGamesForm.invalid">
+            Add Game
+          </button>
         </form>
+      } @else if (show === "announce") {
+        <section class="announce">
+          <div class="announcements-card"></div>
+          @for (an of ann; track an.id) {
+            <div class="announcement">
+              <h3>Announcement for: {{ an.subject }}</h3>
+              <p class="{{ an.importance }}">importance: {{ an.importance }}</p>
+              <p class="note">
+                Manager's note: <br /><span> "{{ an.note }}" </span>
+              </p>
+              <p class="line">Place: {{ an.place }}</p>
+              <p>Time: {{ an.date.toDate() | date: "mediumTime" }}</p>
+              <p class="date">
+                Date: {{ an.date.toDate() | date: "fullDate" }}
+                <i class="bi bi-trash" (click)="deleteAnnouncement(an.id)"></i>
+              </p>
+            </div>
+          }
+          <form
+            action=""
+            [formGroup]="addAnnouncementForm"
+            (ngSubmit)="addAnnouncement()"
+          >
+            <div>
+              <label for="importance">Importance</label>
+              <select name="importance" id="importance" formControlName="importance">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div>
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" formControlName="subject" />
+            </div>
+            <div>
+              <label for="team">Team</label>
+              <input type="text" id="team" formControlName="team" />
+            </div>
+            <div>
+              <label for="place">Place</label>
+              <input type="text" id="place" formControlName="place" />
+            </div>
+            <div>
+              <label for="date">Date</label>
+              <input type="datetime-local" id="date" formControlName="date" />
+            </div>
+            <div>
+              <label for="note">Leave Note</label>
+              <input
+                type="note"
+                id="note"
+                formControlName="note"
+                placeholder="e.g: please be on time"
+              />
+            </div>
+
+            <button type="submit" [disabled]="addAnnouncementForm.invalid">Add Announcement</button>
+          </form>
+        </section>
       }
-    } @else if (
+    }
+    @else if (
       user && user.userType === "TeamMember" && user.role === "player"
     ) {
       <ul>
-        <li>Announcements</li>
+        <li (click)="show = 'announce'">Announcements</li>
         <li (click)="show = 'games'">Future Games</li>
         <li (click)="show = 'team'">Your Team</li>
         <li (click)="show = 'bio'">Bio</li>
@@ -513,12 +571,25 @@
         <p>
           contact: <span>{{ user.email }}</span>
         </p>
-        <p>{{ user.position }}</p>
         <p>Role: {{ user.role }}</p>
-        <p>Age: {{ user.age }}</p>
         <p>Team: {{ user.team }}</p>
+        <p>Position: {{ user.position }}</p>
         <p>Experience: {{ user.experience }}</p>
+        <p>Age: {{ user.age }}</p>
         <button (click)="deleteUser()">Delete User</button>
+      } @else if (show === "announce") {
+        @for (an of ann; track an.id) {
+          <div class="announcement">
+            <h3>Announcement for: {{ an.subject }}</h3>
+            <p class="{{ an.importance }}">importance: {{ an.importance }}</p>
+            <p class="note">
+              Manager's note: <br><span> "{{ an.note }}" </span>
+            </p>
+            <p class="line">Place: {{ an.place }}</p>
+            <p>Time: {{ an.date.toDate() | date: "mediumTime" }}</p>
+            <p>Date: {{ an.date.toDate() | date: "fullDate" }}</p>
+          </div>
+        }
       }
     }
   </div>

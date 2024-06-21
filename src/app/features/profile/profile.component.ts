@@ -1,6 +1,12 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UsersFirebaseService } from '../../shared/services/UsersFirebase.service';
+import { NewsFirebaseService } from '../../shared/services/NewsFirebase.service';
+import { GamesFirebaseService } from '../../shared/services/GamesFirebase.service';
+import { AnnouncementsFirebase } from '../../shared/services/Announcements.service';
 import { User } from '../../types/users';
+import { News } from '../../types/news';
+import { Game } from '../../types/game';
+import { Announcement } from '../../types/announcement';
 import {
   ActivatedRoute,
   Router,
@@ -15,18 +21,21 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { NewsFirebaseService } from '../../shared/services/NewsFirebase.service';
-import { News } from '../../types/news';
 import { NewsCardComponent } from '../../shared/components/news-card/news-card.component';
-import { validatePassword } from 'firebase/auth';
-import { routes } from '../../app.routes';
-import { GamesFirebaseService } from '../../shared/services/gamesFirebase.service';
-import { Game } from '../../types/game';
+import { Observable, TimestampProvider, tap, timestamp } from 'rxjs';
+import { DatePipe } from '@angular/common';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, ReactiveFormsModule, NewsCardComponent],
+  imports: [
+    RouterLink,
+    RouterOutlet,
+    ReactiveFormsModule,
+    NewsCardComponent,
+    DatePipe,
+  ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
@@ -37,13 +46,15 @@ export class ProfileComponent implements OnInit {
   private auth = inject(AuthService);
   private router = inject(Router);
   private gamesService = inject(GamesFirebaseService);
+  private announcements = inject(AnnouncementsFirebase);
+  private fb = inject(FormBuilder);
+
   addButton = false;
-  togglebutton() {
-    this.addButton = !this.addButton;
-  }
+  announcementsByTeam$: Observable<Announcement[]> | undefined;
   allNews: News[] = [];
   faveNews: News[] = [];
   user: User | null = null;
+  ann: Announcement[] = [];
   show:
     | 'news'
     | 'favourites'
@@ -54,20 +65,29 @@ export class ProfileComponent implements OnInit {
     | 'manageTeam'
     | 'games'
     | 'announce'
-    | 'team' = 'bio';
+    | 'team' = 'announce';
 
-  private fb = inject(FormBuilder);
+  togglebutton() {
+    this.addButton = !this.addButton;
+  }
+
   get controls() {
     return this.addNewsForm.controls;
   }
+
   get addplayerControl() {
     return this.addPlayerForm.controls;
   }
+
   get addManagerControl() {
     return this.addManagerForm.controls;
   }
+
   get addGamesControl() {
     return this.addGamesForm.controls;
+  }
+  get addAnnouncementsControl() {
+    return this.addAnnouncementForm.controls;
   }
   addPlayerForm = this.fb.group({
     role: ['player'],
@@ -82,6 +102,7 @@ export class ProfileComponent implements OnInit {
     confirmPassword: ['', [Validators.required]],
     src: [''],
   });
+
   addManagerForm = this.fb.group({
     role: ['manager'],
     team: ['', [Validators.required]],
@@ -94,6 +115,7 @@ export class ProfileComponent implements OnInit {
     confirmPassword: ['', [Validators.required]],
     src: [''],
   });
+
   addNewsForm = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(7)]],
     about: [''],
@@ -101,6 +123,7 @@ export class ProfileComponent implements OnInit {
     src: ['', [Validators.required, Validators.minLength(7)]],
     date: [new Date(), [Validators.required]],
   });
+
   addGamesForm = this.fb.group({
     team1: ['', [Validators.required]],
     src1: ['', [Validators.required]],
@@ -110,25 +133,33 @@ export class ProfileComponent implements OnInit {
     address: ['', [Validators.required, Validators.minLength(5)]],
     tickets: [20, [Validators.required]],
   });
-
+  addAnnouncementForm = this.fb.group({
+    importance: ['low', [Validators.required]],
+    date: ['', [Validators.required]],
+    place: ['', [Validators.required, Validators.minLength(5)]],
+    team: [`${this.auth.currentUserTeam$.value}`, [Validators.required]],
+    note: ['', [Validators.required]],
+    subject: ['', [Validators.required]],
+    agree: [0],
+    dissagree: [0],
+  });
   ngOnInit(): void {
     this.activatedRoutes.paramMap.subscribe((paramMap) => {
       const userId = paramMap.get('uid');
       if (userId) {
-        console.log(userId);
         this.usersFirebaseService.getUserById(userId).subscribe((data) => {
           this.user = data;
+          console.log('User data:', data);
         });
         this.newsFirebaseService.getNewsByUserId(userId).subscribe((news) => {
           this.allNews = news;
-          console.log(news);
+          console.log('News:', news);
         });
         this.loadFavoriteNews(userId);
-        {
-          console.log(userId);
-        }
+        this.loadAnnouncements();
       }
     });
+
     this.addPlayerForm.addValidators(this.passwordMatch());
     this.addManagerForm.addValidators(this.passwordMatch());
   }
@@ -159,6 +190,7 @@ export class ProfileComponent implements OnInit {
       );
     }
   }
+
   addNewGames() {
     if (this.addGamesForm.valid && this.user) {
       const gameData: Game = {
@@ -175,27 +207,28 @@ export class ProfileComponent implements OnInit {
         next: (docId) => {
           console.log('Game added:', docId);
           this.addGamesForm.reset();
-
         },
         error: (error) => {
           console.error('Error adding game:', error);
         },
       });
-    }else{
-      console.log('there is a problem')
+    } else {
+      console.log('there is a problem');
     }
   }
+
   deleteNews(id: string) {
     this.newsFirebaseService.deleteNews(id).subscribe({
       next: () => {
-        console.log('news deleted');
+        console.log('News deleted');
         this.allNews = this.allNews.filter((news) => news.id !== id);
       },
       error: (error) => {
-        console.log("cant kill what's already dead", error.message);
+        console.log('Cannot delete news', error.message);
       },
     });
   }
+
   addNewPlayer() {
     console.log(this.addPlayerForm.value);
     if (this.addPlayerForm.valid) {
@@ -209,9 +242,7 @@ export class ProfileComponent implements OnInit {
         .subscribe({
           next: (userCredential) => {
             console.log('User registered successfully:', userCredential);
-            alert(
-              'Make sure new user vertifies their email before signing in.',
-            );
+            alert('Make sure new user verifies their email before signing in.');
           },
           error: (error) => {
             console.error('Error registering user:', error.message);
@@ -219,6 +250,7 @@ export class ProfileComponent implements OnInit {
         });
     }
   }
+
   addManager() {
     console.log(this.addManagerForm.value);
     if (this.addManagerForm.valid) {
@@ -232,15 +264,53 @@ export class ProfileComponent implements OnInit {
         .subscribe({
           next: (userCredential) => {
             console.log('User registered successfully:', userCredential);
-            alert(
-              'Make sure new user vertifies their email before signing in.',
-            );
+            alert('Make sure new user verifies their email before signing in.');
           },
           error: (error) => {
             console.error('Error registering user:', error.message);
           },
         });
     }
+  }
+  addAnnouncement() {
+    if (this.addAnnouncementForm.valid && this.user) {
+      const formValue = this.addAnnouncementForm.value;
+    const dateValue = formValue.date ? new Date(formValue.date) : new Date();
+    const timestamp = Timestamp.fromDate(dateValue);
+      const announcement: Announcement = {
+        importance: formValue.importance as 'medium' | 'high' | 'low',
+        subject: formValue.subject as string,
+        team: formValue.team as string,
+        place: formValue.place as string,
+        note: formValue.note as string,
+        agree: 0,
+        dissagree: 0,
+        id: this.user.id as string,
+        date: timestamp as Timestamp,
+      };
+  this.announcements.addAnnouncements(announcement).subscribe({
+    next: (docId) => {
+      console.log('Announcement added:', docId);
+      this.addAnnouncementForm.reset();
+    },
+    error: (error) => {
+      console.error('Error adding Announcement:', error);
+    },
+  })
+    } else {
+      console.log('and i oops!',);
+    }
+  }
+  deleteAnnouncement(id: string) {
+    this.announcements.deleteAnnouncements(id).subscribe({
+      next: () => {
+        console.log('announcement deleted');
+        this.ann = this.ann.filter((an) => an.id !== id);
+      },
+      error: (error) => {
+        console.log('Cannot delete that', error.message);
+      },
+    });
   }
   passwordMatch() {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -251,17 +321,19 @@ export class ProfileComponent implements OnInit {
           };
     };
   }
+
   deleteUser() {
     this.auth.deleteUser().subscribe({
       next: () => {
-        console.log('guy just got obliterated from existance');
+        console.log('User deleted');
         this.router.navigate(['/home']);
       },
       error: (error) => {
-        console.log('cant find user', error);
+        console.log('Cannot delete user', error);
       },
     });
   }
+
   loadFavoriteNews(userId: string): void {
     this.usersFirebaseService.getFavorites(userId).subscribe({
       next: (favoriteIds) => {
@@ -277,6 +349,17 @@ export class ProfileComponent implements OnInit {
         });
       },
       error: (error) => console.error('Failed to get favorites', error),
+    });
+  }
+
+  loadAnnouncements() {
+    this.announcements.getAnnouncementsByTeam().subscribe({
+      next: (data) => {
+        this.ann = data;
+      },
+      error: (error) => {
+        console.error('Error loading announcements:', error);
+      },
     });
   }
 }

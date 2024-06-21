@@ -18,7 +18,7 @@
             <p>Age: {{ user.age }}</p>
           </div>
         </div>
-        <button (click)="deleteUser()">Delete User</button>
+        <button (click)="deleteUser()">Deactivate Account</button>
       } @else if (show === "favourites") {
         <div class="card-container">
           @for (news of faveNews; track news.title) {
@@ -145,7 +145,7 @@
             <p>Experience: {{ user.experience }}</p>
           </div>
         </div>
-        <button (click)="deleteUser()">Delete User</button>
+        <button (click)="deleteUser()">Deactivate Account</button>
       } @else if (show === "addPlayer") {
         <form action="" [formGroup]="addPlayerForm" (ngSubmit)="addNewPlayer()">
           <div>
@@ -428,7 +428,7 @@
           </div>
         </div>
 
-        <button (click)="deleteUser()">Delete User</button>
+        <button (click)="deleteUser()">Deactivate Account</button>
       } @else if (show === "games") {
         <form action="" [formGroup]="addGamesForm" (ngSubmit)="addNewGames()">
           <div>
@@ -519,7 +519,11 @@
           >
             <div>
               <label for="importance">Importance</label>
-              <select name="importance" id="importance" formControlName="importance">
+              <select
+                name="importance"
+                id="importance"
+                formControlName="importance"
+              >
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
                 <option value="high">High</option>
@@ -551,12 +555,13 @@
               />
             </div>
 
-            <button type="submit" [disabled]="addAnnouncementForm.invalid">Add Announcement</button>
+            <button type="submit" [disabled]="addAnnouncementForm.invalid">
+              Add Announcement
+            </button>
           </form>
         </section>
       }
-    }
-    @else if (
+    } @else if (
       user && user.userType === "TeamMember" && user.role === "player"
     ) {
       <ul>
@@ -566,24 +571,29 @@
         <li (click)="show = 'bio'">Bio</li>
       </ul>
       @if (show === "bio") {
-        <img [src]="user.src" alt="" />
-        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-        <p>
-          contact: <span>{{ user.email }}</span>
-        </p>
-        <p>Role: {{ user.role }}</p>
-        <p>Team: {{ user.team }}</p>
-        <p>Position: {{ user.position }}</p>
-        <p>Experience: {{ user.experience }}</p>
-        <p>Age: {{ user.age }}</p>
-        <button (click)="deleteUser()">Delete User</button>
+        <div class="bio">
+          <img [src]="user.src" alt="" />
+         <div>
+          <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+          <p>
+            contact: <span>{{ user.email }}</span>
+          </p>
+          <p>Role: {{ user.role }}</p>
+          <p>Team: {{ user.team }}</p>
+          <p>Position: {{ user.position }}</p>
+          <p>Experience: {{ user.experience }}</p>
+          <p>Age: {{ user.age }}</p>
+          <button (click)="deleteUser()">Deactivate Account</button>
+        
+         </div>
+          </div>
       } @else if (show === "announce") {
         @for (an of ann; track an.id) {
           <div class="announcement">
             <h3>Announcement for: {{ an.subject }}</h3>
             <p class="{{ an.importance }}">importance: {{ an.importance }}</p>
             <p class="note">
-              Manager's note: <br><span> "{{ an.note }}" </span>
+              Manager's note: <br /><span> "{{ an.note }}" </span>
             </p>
             <p class="line">Place: {{ an.place }}</p>
             <p>Time: {{ an.date.toDate() | date: "mediumTime" }}</p>

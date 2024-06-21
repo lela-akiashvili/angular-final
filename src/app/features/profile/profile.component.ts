@@ -65,7 +65,7 @@ export class ProfileComponent implements OnInit {
     | 'manageTeam'
     | 'games'
     | 'announce'
-    | 'team' = 'announce';
+    | 'team' = 'bio';
 
   togglebutton() {
     this.addButton = !this.addButton;

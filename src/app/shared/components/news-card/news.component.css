@@ -1,7 +1,7 @@
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1rem;
+  /* gap: 1rem; */
   /* border-top: 1px solid red; */
 }
 h4 {
@@ -18,15 +18,16 @@ p {
   min-height: 25vh;
   overflow: hidden;
   gap: 0.5rem;
-  /* border-radius: 5px; */
-  border-bottom: 1px solid red;
+/* max-width: fit-content; */
   background-color: rgb(228, 228, 228);
+  border: 1.5px solid rgb(228, 228, 228);
+  border-bottom: 1.5px solid red;
   padding: 1rem;
 }
 img {
-width: 50%;
+  width: 50%;
   min-height: 25vh;
-  /* float: left; */
+  box-shadow: 0 0 1px 1px rgb(255, 60, 60);
 }
 h5 {
   margin: 0;
@@ -47,24 +48,26 @@ p {
 }
 a {
   color: rgb(28, 28, 28);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }
 i {
   color: red;
   font-size: medium;
 }
-div.search{
+div.search {
   display: flex;
   max-width: fit-content;
-  margin:5rem auto 1rem auto;
+  margin: 7rem auto 1rem auto;
   gap: 0;
   border-bottom: 1px solid red;
   border-top: 1px solid red;
-
 }
 input {
-  padding:5px 10px;
+  padding: 5px 10px;
   border: none;
-  /* border-bottom: 1px solid red; */
   background-color: rgb(235, 235, 235);
   outline: none;
 }
@@ -72,8 +75,32 @@ button {
   background-color: red;
   border: none;
   color: white;
-  /* font-weight: 500; */
-  border-right:1px solid rgb(235, 235, 235);
-  border-top:1px solid rgb(235, 235, 235);
-  border-bottom:1px solid rgb(235, 235, 235);
+  border-right: 1px solid rgb(235, 235, 235);
+  border-top: 1px solid rgb(235, 235, 235);
+  border-bottom: 1px solid rgb(235, 235, 235);
+}
+.card:hover {
+  animation: border 1.3s infinite ease-in-out;
+}
+@keyframes border {
+
+  10% {
+    border-left: 1.5px solid red;
+  }
+  50% {
+    border-top: 1.5px solid red;
+  }
+  100% {
+    border-right: 1.5px solid red;
+  }
+
+}
+@media (min-width: 550px) {
+  input {
+    min-width: 250px;
+    padding: 10px 15px;
+  }
+  .card-container {
+    gap: 1rem;
+  }
 }

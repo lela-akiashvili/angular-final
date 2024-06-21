@@ -46,6 +46,7 @@ ul li a:hover {
   background-color: rgb(255, 0, 0);
   color: white;
 }
+
 .dropdown {
   display: none;
   position: sticky;
@@ -69,4 +70,45 @@ i:hover {
 .bi-chevron-down {
   font-size: initial;
   margin-left: 2px;
+}
+@media(min-width:750px){
+  .bi-list{
+    display: none;
+  }
+  header{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  nav{
+    display: initial;
+    position: initial;
+    display: flex;
+  }
+  ul{
+    display: flex;
+  }
+  
+  .dropdown{
+    position: absolute;
+    background-color: rgb(204, 204, 204);
+    margin-top: 1rem;
+    margin-left: -1rem;
+  
+
+  }
+  .sportsmenu :last-child {
+    border-bottom: 1px solid red;
+  }
+  .sportsmenu li {
+    border-top: 1px solid red;
+  }
+  .sportsmenu li:hover {
+    cursor: pointer;
+  }
+}
+@media (min-width:1000px) {
+  header{
+    padding: 0 3rem 0 10rem;
+  }
 }

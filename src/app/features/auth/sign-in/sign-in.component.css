@@ -15,7 +15,7 @@ div {
 }
 input::placeholder {
   font-style: italic;
-  padding-left: 1rem;
+  /* padding-left: 1rem; */
 }
 input {
   padding: 6px 6px 6px 17px;
@@ -30,4 +30,15 @@ button {
   background-color: rgb(204, 204, 204);
   border: none;
   border-bottom: 1.4px solid red;
+}
+@media (min-width:750px){
+  input{
+    min-width: 15rem;
+    font-size: 1rem;
+    padding-left: 1.5rem;
+  }
+  ::placeholder{
+      font-size: 1rem;
+
+  }
 }

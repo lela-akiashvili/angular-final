@@ -1,0 +1,31 @@
+footer{
+    background-color: black;
+    color: white;
+    box-shadow:  5px 0 0 5px  red;
+    padding: 1rem 0;
+}
+nav{
+    display: flex;
+    gap: 1rem;
+justify-content: center;
+}
+ul{
+    list-style: none;
+    padding: 0;
+}
+li{
+    padding: 5px ;
+}
+a{
+        color: white;
+
+}
+a:hover{
+    cursor: pointer;
+    /* text-decoration: underline; */
+}
+@media (min-width:500px) {
+    nav{
+        gap:4rem
+    }
+}

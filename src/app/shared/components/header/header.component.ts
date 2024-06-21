@@ -10,19 +10,19 @@ import { Router, RouterLink } from '@angular/router';
         <h1>SPORTS TODAY</h1>
         <i (click)="onShowMenu()" class="bi bi-list"></i>
       </div>
-      <nav [class.show]="showMenu">
+      <nav [class.show]="showMenu" class="showNav">
         <ul>
-          <li><a routerLink="/home" (click)="onShowMenu()">News</a></li>
+          <li><a routerLink="/home">News</a></li>
           <li class="sportsmenu" (click)="onShowDropDown()">
             Sports <i class="bi bi-chevron-down"></i>
             <ul class="dropdown" [class.show]="showDropDown">
               <li (click)="filterNews('football')">Football</li>
               <li (click)="filterNews('basketball')">Basketball</li>
-              <li (click)="filterNews('volleyball')">Volleyball</li>
+               <li (click)="filterNews('volleyball')">Volleyball</li>
               <li (click)="filterNews('ice skating')">Ice skating</li>
             </ul>
           </li>
-          <li><a routerLink="/tickets" (click)="onShowMenu()">Tickets</a></li>
+          <li><a routerLink="/tickets">Tickets</a></li>
         </ul>
         <ul>
           <ng-content></ng-content>

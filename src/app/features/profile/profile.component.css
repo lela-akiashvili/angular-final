@@ -111,9 +111,10 @@ span.warning {
   background-color: rgb(231, 231, 231);
   border-radius: 5px;
   padding: 1rem 0;
-  margin: 1rem 0 0 0;
   text-transform: capitalize;
   border: 1px solid red;
+  max-width: fit-content;
+  margin:1rem auto 0 auto;
 }
 .announcement h3{
   margin-top: 0;

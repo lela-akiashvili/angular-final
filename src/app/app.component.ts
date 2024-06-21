@@ -8,10 +8,11 @@ import {
 import { HeaderComponent } from './shared/components/header/header.component';
 import { AuthService } from './shared/services/Auth.service';
 import { AsyncPipe } from '@angular/common';
+import { FooterComponent } from './shared/components/footer/footer.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, RouterLink, RouterLinkActive, AsyncPipe],
+  imports: [RouterOutlet, HeaderComponent, RouterLink, AsyncPipe, FooterComponent],
   template: `
     <app-header>
       @if (isUserIn$|async) {
@@ -32,13 +33,10 @@ import { AsyncPipe } from '@angular/common';
       }
     </app-header>
     <main><router-outlet></router-outlet></main>
+<app-footer>
   `,
   styles: [
     `
-    
-      // main {
-      //   margin-top: 4.5px;
-      // }
       li {
         padding: 1rem;
         border-bottom: 1px solid red;

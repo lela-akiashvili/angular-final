@@ -12,6 +12,19 @@ import { AuthService } from '../../services/Auth.service';
   template: `<div class="search">
       <input type="text" /> <button>Search</button>
     </div>
+    <form action="">
+      <p><i class="bi bi-funnel"></i> filter</p>
+      <div class="sort-div">
+        <div>
+          <label for="sortBy">Date <i class="bi bi-sort-down-alt"></i></label>
+          <input type="radio" id="sortBy" name="SortBy" />
+        </div>
+        <div>
+          <label for="sortBy">Date <i class="bi bi-sort-up"></i></label>
+          <input type="radio" id="sortBy" name="SortBy" />
+        </div>
+      </div>
+    </form>
     <div class="card-container">
       @for (news of filteredNews; track news.id) {
         <div class="card">
@@ -42,7 +55,7 @@ export class NewsCardComponent implements OnInit {
   private usersFirebaseService = inject(UsersFirebaseService);
   private auth = inject(AuthService);
   private activatedRouter = inject(ActivatedRoute);
-  newsSig:News[]=[];
+  newsSig: News[] = [];
   filteredNews: News[] = [];
   ngOnInit(): void {
     this.newsFirebaseService.getNews().subscribe((news) => {

@@ -1,7 +1,7 @@
 footer{
     background-color: black;
     color: white;
-    box-shadow:  5px 0 0 5px  red;
+    box-shadow:  0 -5px 0px 0  red;
     padding: 1rem 0;
 }
 nav{
@@ -22,7 +22,6 @@ a{
 }
 a:hover{
     cursor: pointer;
-    /* text-decoration: underline; */
 }
 @media (min-width:500px) {
     nav{

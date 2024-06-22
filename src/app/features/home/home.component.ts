@@ -7,13 +7,19 @@ import { map, take } from 'rxjs';
 import { GamesFirebaseService } from '../../shared/services/GamesFirebase.service';
 import { Game } from '../../types/game';
 import { RouterLink } from '@angular/router';
+import { CarouselComponent } from '../../shared/components/carousel/carousel.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ProfileComponent, NewsCardComponent, RouterLink],
+  imports: [ProfileComponent, NewsCardComponent,CarouselComponent, RouterLink],
   template: `
-    <section>
+    <section> 
+      <div>
+          <app-carousel [items]="newsCarousel"></app-carousel>
       <app-news-card></app-news-card>
+     
+      </div>
+    
       <aside>
         <h2>Upcoming Matches</h2>
         <div class="game-container">
@@ -37,6 +43,7 @@ import { RouterLink } from '@angular/router';
   `,
   styles: `
     section {
+      margin-top:7rem;
       min-height: 100vh;
       max-width: 100vw;
     }

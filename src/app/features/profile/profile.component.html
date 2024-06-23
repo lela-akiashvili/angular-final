@@ -119,8 +119,9 @@
           </button>
         </form>
       }
-    } 
-    @else if (user && user.userType === "TeamMember" && user.role === "coach") {
+    } @else if (
+      user && user.userType === "TeamMember" && user.role === "coach"
+    ) {
       <ul>
         <li (click)="show = 'addPlayer'">Add Player</li>
         <li (click)="show = 'addManager'">Add Manager</li>
@@ -402,22 +403,25 @@
         </form>
       } @else {
         <div class="member-container">
-           @for (user of UsersByTeam; track $index) {
-          <div class="member-card">
-            <img [src]="user.src" alt="" />
-            <div>
-               <p>{{ user.firstName }} {{ user.lastName }}</p>
-            <p>Role: {{ user.role }}</p>
-            @if (user.position!.length > 1) {
-              <p>Position: {{ user.position }}</p>
-            }
-            <button><i class="bi bi-person-dash-fill"></i></button>
+          @for (user of UsersByTeam; track $index) {
+            <div class="member-card">
+              <img [src]="user.src" alt="" />
+              <div>
+                <p>{{ user.firstName }} {{ user.lastName }}</p>
+                <p>Role: {{ user.role }}</p>
+                @if (user.position!.length > 1) {
+                  <p>Position: {{ user.position }}</p>
+                }
+                <button><i class="bi bi-person-dash-fill"></i></button>
+              </div>
             </div>
-           
-          </div>
-        }
+          } @empty {
+            <p>
+              Please refresh page. if nothing comes up, Teammates aren't added
+              yet
+            </p>
+          }
         </div>
-       
       }
     }
     @if (user && user.userType === "TeamMember" && user.role === "manager") {
@@ -575,25 +579,29 @@
             </button>
           </form>
         </div>
-      }@else if(show==='manageTeam') {
+      } @else if (show === "manageTeam") {
         <div class="member-container">
           @for (user of UsersByTeam; track $index) {
-         <div class="member-card">
-           <img [src]="user.src" alt="" />
-           <div>
-              <p>{{ user.firstName }} {{ user.lastName }}</p>
-           <p>Role: {{ user.role }}</p>
-           @if (user.position!.length > 1) {
-             <p>Position: {{ user.position }}</p>
-           }
-           <button (click)="deleteUsers(user.id)"><i class="bi bi-person-dash-fill"></i></button>
-           </div>
-          
-         </div>
-       }@empty {
-        <p>Please refresh page. if nothing comes up, Teammates aren't added yet</p>
-       }
-       </div>
+            <div class="member-card">
+              <img [src]="user.src" alt="" />
+              <div>
+                <p>{{ user.firstName }} {{ user.lastName }}</p>
+                <p>Role: {{ user.role }}</p>
+                @if (user.position!.length > 1) {
+                  <p>Position: {{ user.position }}</p>
+                }
+                <button (click)="deleteUsers(user.id)">
+                  <i class="bi bi-person-dash-fill"></i>
+                </button>
+              </div>
+            </div>
+          } @empty {
+            <p>
+              Please refresh page. if nothing comes up, Teammates aren't added
+              yet
+            </p>
+          }
+        </div>
       }
     } @else if (
       user && user.userType === "TeamMember" && user.role === "player"
@@ -633,22 +641,26 @@
             <p>Date: {{ an.date.toDate() | date: "fullDate" }}</p>
           </div>
         }
-      }@else if (show==='manageTeam') {
+      } @else if (show === "manageTeam") {
         <div class="member-container">
           @for (user of UsersByTeam; track $index) {
-         <div class="member-card">
-           <img [src]="user.src" alt="" />
-           <div>
-              <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-           <p>Role: {{ user.role }}</p>
-           @if (user.position!.length > 1) {
-             <p>Position: {{ user.position }}</p>
-           }
-           </div>
-          
-         </div>
-       }
-       </div>
+            <div class="member-card">
+              <img [src]="user.src" alt="" />
+              <div>
+                <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+                <p>Role: {{ user.role }}</p>
+                @if (user.position!.length > 1) {
+                  <p>Position: {{ user.position }}</p>
+                }
+              </div>
+            </div>
+          } @empty {
+            <p>
+              Please refresh page. if nothing comes up, Teammates aren't added
+              yet
+            </p>
+          }
+        </div>
       }
     }
   </div>

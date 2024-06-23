@@ -10,6 +10,6 @@ export interface User {
   team: string;
   experience?: string;
   position?: string;
-  id?: string;
+  id: string;
   favorites?:string[];
 }

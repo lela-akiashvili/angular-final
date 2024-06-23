@@ -1,27 +1,30 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { NewsFirebaseService } from '../../services/NewsFirebase.service';
 import { News } from '../../../types/news';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UsersFirebaseService } from '../../services/UsersFirebase.service';
 import { AuthService } from '../../services/Auth.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-news-card',
   standalone: true,
-  imports: [RouterLink],
-  template: `<div class="search">
-      <input type="text" /> <button>Search</button>
+  imports: [RouterLink, FormsModule],
+  template: `
+    <div class="search-input">
+      <input type="text" id="searchByInput" [(ngModel)]="search" />
+      <button (click)="filterNews()">Search</button>
     </div>
     <form action="">
       <p><i class="bi bi-funnel"></i> filter</p>
       <div class="sort-div">
         <div>
-          <label for="sortBy">Date <i class="bi bi-sort-down-alt"></i></label>
-          <input type="radio" id="sortBy" name="SortBy" />
+          <label for="desc">Date <i class="bi bi-sort-down-alt"></i></label>
+          <input type="radio" id="sortBy" name="SortBy" value="desc" (change)="sortNews('desc')" />
         </div>
         <div>
-          <label for="sortBy">Date <i class="bi bi-sort-up"></i></label>
-          <input type="radio" id="sortBy" name="SortBy" />
+          <label for="asc">Date <i class="bi bi-sort-up"></i></label>
+          <input type="radio" id="sortBy" name="SortBy" value="asc" (change)="sortNews('asc')" />
         </div>
       </div>
     </form>
@@ -43,20 +46,26 @@ import { AuthService } from '../../services/Auth.service';
                 (click)="addToFavorites(news.id!)"
               ></i>
             </h5>
-            <!-- <p>{{ news.text }}</p> -->
+            <h5>{{ news.date }}</h5>
           </span>
         </div>
       }
-    </div> `,
-  styleUrl: `./news.component.css`,
+    </div> 
+  `,
+  styleUrl: './news.component.css',
 })
 export class NewsCardComponent implements OnInit {
   private newsFirebaseService = inject(NewsFirebaseService);
   private usersFirebaseService = inject(UsersFirebaseService);
   private auth = inject(AuthService);
   private activatedRouter = inject(ActivatedRoute);
+  private router = inject(Router);
+
   newsSig: News[] = [];
   filteredNews: News[] = [];
+  search: string = '';
+  sortOrder: string = '';
+
   ngOnInit(): void {
     this.newsFirebaseService.getNews().subscribe((news) => {
       this.newsSig = news;
@@ -66,6 +75,7 @@ export class NewsCardComponent implements OnInit {
       this.filterNews(params['sport']);
     });
   }
+
   addToFavorites(newsId: string): void {
     const userId = this.auth.getCurrentUserId();
     if (userId) {
@@ -77,14 +87,42 @@ export class NewsCardComponent implements OnInit {
       console.log('user not in my guy what did you expect', newsId);
     }
   }
+
   filterNews(sport?: string) {
+    let filtered = this.newsSig;
     if (sport) {
-      this.filteredNews = this.newsSig.filter((newsItem) =>
-        newsItem.about?.includes(sport),
-      );
-      console.log('hi');
-    } else {
-      this.filteredNews = this.newsSig;
+      filtered = filtered.filter((newsItem) => newsItem.about?.includes(sport));
     }
+    if (this.search) {
+      const searchTerm = this.search.toLowerCase();
+      filtered = filtered.filter((newsItem) =>
+        newsItem.title?.toLowerCase().includes(searchTerm) ||
+        newsItem.about?.some(tag => tag.toLowerCase().includes(searchTerm))
+      );
+    }
+    this.filteredNews = this.sortNewsArray(filtered);
+  }
+
+  filterBySearch(term: string) {
+    this.search = term;
+    this.filterNews();
+  }
+
+  sortNews(way: string) {
+    this.sortOrder = way;
+    this.filteredNews = this.sortNewsArray(this.filteredNews);
+  }
+
+  sortNewsArray(newsArray: News[]): News[] {
+    return newsArray.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      if (this.sortOrder === 'asc') {
+        return dateA.getTime() - dateB.getTime();
+      } else if (this.sortOrder === 'desc') {
+        return dateB.getTime() - dateA.getTime();
+      }
+      return 0;
+    });
   }
 }

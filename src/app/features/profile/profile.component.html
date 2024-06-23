@@ -1,6 +1,6 @@
 <section>
   <div>
-    <!-- @if (user && user.userType === "regularUser") {
+    @if (user && user.userType === "regularUser") {
       <ul>
         <li (click)="show = 'news'">Your News</li>
         <li (click)="show = 'favourites'">Favourites</li>
@@ -33,7 +33,6 @@
                   @for (item of news.about; track $index) {
                     <span>{{ item }}, </span>
                   }
-                  <i class="bi bi-bookmark-heart"></i>
                 </h5>
                 <p>{{ news.text }}</p>
               </span>
@@ -46,7 +45,7 @@
         <h2>articles you created</h2>
         <div class="card-container">
           @for (news of allNews; track news.title) {
-            <div class="card">
+            <div class="card news">
               <img [src]="news.src" alt="" />
               <h2>{{ news.title }}</h2>
               <h4>tags: {{ news.about }}</h4>
@@ -120,10 +119,8 @@
           </button>
         </form>
       }
-    } -->
-    <!-- @else if (
-      user && user.userType === "TeamMember" && user.role === "coach"
-    ) {
+    } 
+    @else if (user && user.userType === "TeamMember" && user.role === "coach") {
       <ul>
         <li (click)="show = 'addPlayer'">Add Player</li>
         <li (click)="show = 'addManager'">Add Manager</li>
@@ -403,8 +400,26 @@
             Register
           </button>
         </form>
+      } @else {
+        <div class="member-container">
+           @for (user of UsersByTeam; track $index) {
+          <div class="member-card">
+            <img [src]="user.src" alt="" />
+            <div>
+               <p>{{ user.firstName }} {{ user.lastName }}</p>
+            <p>Role: {{ user.role }}</p>
+            @if (user.position!.length > 1) {
+              <p>Position: {{ user.position }}</p>
+            }
+            <button><i class="bi bi-person-dash-fill"></i></button>
+            </div>
+           
+          </div>
+        }
+        </div>
+       
       }
-    }  -->
+    }
     @if (user && user.userType === "TeamMember" && user.role === "manager") {
       <ul>
         <li (click)="show = 'games'">Plan Game</li>
@@ -495,7 +510,7 @@
           </button>
         </form>
       } @else if (show === "announce") {
-        <section class="announce">
+        <div class="announce">
           <div class="announcements-card"></div>
           @for (an of ann; track an.id) {
             <div class="announcement">
@@ -559,7 +574,26 @@
               Add Announcement
             </button>
           </form>
-        </section>
+        </div>
+      }@else if(show==='manageTeam') {
+        <div class="member-container">
+          @for (user of UsersByTeam; track $index) {
+         <div class="member-card">
+           <img [src]="user.src" alt="" />
+           <div>
+              <p>{{ user.firstName }} {{ user.lastName }}</p>
+           <p>Role: {{ user.role }}</p>
+           @if (user.position!.length > 1) {
+             <p>Position: {{ user.position }}</p>
+           }
+           <button (click)="deleteUsers(user.id)"><i class="bi bi-person-dash-fill"></i></button>
+           </div>
+          
+         </div>
+       }@empty {
+        <p>Please refresh page. if nothing comes up, Teammates aren't added yet</p>
+       }
+       </div>
       }
     } @else if (
       user && user.userType === "TeamMember" && user.role === "player"
@@ -567,26 +601,25 @@
       <ul>
         <li (click)="show = 'announce'">Announcements</li>
         <li (click)="show = 'games'">Future Games</li>
-        <li (click)="show = 'team'">Your Team</li>
+        <li (click)="show = 'manageTeam'">Your Team</li>
         <li (click)="show = 'bio'">Bio</li>
       </ul>
       @if (show === "bio") {
         <div class="bio">
           <img [src]="user.src" alt="" />
-         <div>
-          <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-          <p>
-            contact: <span>{{ user.email }}</span>
-          </p>
-          <p>Role: {{ user.role }}</p>
-          <p>Team: {{ user.team }}</p>
-          <p>Position: {{ user.position }}</p>
-          <p>Experience: {{ user.experience }}</p>
-          <p>Age: {{ user.age }}</p>
-          <button (click)="deleteUser()">Deactivate Account</button>
-        
-         </div>
+          <div>
+            <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+            <p>
+              contact: <span>{{ user.email }}</span>
+            </p>
+            <p>Role: {{ user.role }}</p>
+            <p>Team: {{ user.team }}</p>
+            <p>Position: {{ user.position }}</p>
+            <p>Experience: {{ user.experience }}</p>
+            <p>Age: {{ user.age }}</p>
+            <button (click)="deleteUser()">Deactivate Account</button>
           </div>
+        </div>
       } @else if (show === "announce") {
         @for (an of ann; track an.id) {
           <div class="announcement">
@@ -600,6 +633,22 @@
             <p>Date: {{ an.date.toDate() | date: "fullDate" }}</p>
           </div>
         }
+      }@else if (show==='manageTeam') {
+        <div class="member-container">
+          @for (user of UsersByTeam; track $index) {
+         <div class="member-card">
+           <img [src]="user.src" alt="" />
+           <div>
+              <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+           <p>Role: {{ user.role }}</p>
+           @if (user.position!.length > 1) {
+             <p>Position: {{ user.position }}</p>
+           }
+           </div>
+          
+         </div>
+       }
+       </div>
       }
     }
   </div>

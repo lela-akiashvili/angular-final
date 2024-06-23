@@ -7,7 +7,7 @@ import { Router, RouterLink } from '@angular/router';
   template: `
     <header>
       <div>
-        <h1>SPORTS TODAY</h1>
+        <h1><a routerLink="/home"> SPORTS TODAY</a></h1>
         <i (click)="onShowMenu()" class="bi bi-list"></i>
       </div>
       <nav [class.show]="showMenu" class="showNav">

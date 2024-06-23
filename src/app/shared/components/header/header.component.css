@@ -108,6 +108,10 @@ i:hover {
     cursor: pointer;
   }
 }
+a{
+  text-decoration: none;
+  color: white;
+}
 @media (min-width:1000px) {
   header{
     padding: 0 3rem 0 10rem;

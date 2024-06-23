@@ -55,6 +55,7 @@ export class ProfileComponent implements OnInit {
   faveNews: News[] = [];
   user: User | null = null;
   ann: Announcement[] = [];
+  UsersByTeam: User[] = [];
   show:
     | 'news'
     | 'favourites'
@@ -64,8 +65,7 @@ export class ProfileComponent implements OnInit {
     | 'addPlayer'
     | 'manageTeam'
     | 'games'
-    | 'announce'
-    | 'team' = 'bio';
+    | 'announce' = 'bio';
 
   togglebutton() {
     this.addButton = !this.addButton;
@@ -151,9 +151,11 @@ export class ProfileComponent implements OnInit {
           this.user = data;
           console.log('User data:', data);
         });
+        this.usersFirebaseService.getUsersByTeam().subscribe((users) => {
+          this.UsersByTeam = users;
+        });
         this.newsFirebaseService.getNewsByUserId(userId).subscribe((news) => {
           this.allNews = news;
-          console.log('News:', news);
         });
         this.loadFavoriteNews(userId);
         this.loadAnnouncements();
@@ -228,55 +230,67 @@ export class ProfileComponent implements OnInit {
       },
     });
   }
-
+  // ეს მეთოდი ბოლომდე დასრულებული არაა, ჯერ მხოლოდ მომხმარებლის firestore data-ს შლის და არა მთლიან auth credentials. ვერ ვასწრებ ყველაფრის დასრულებას დედლაინამდე ამიტომ, მოგვიანებით კიდევ დავხვეწავ.
+  deleteUsers(id: string) {
+    this.usersFirebaseService.deleteUser(id).subscribe({
+      next: () => {
+        console.log('User deleted successfully');
+        this.UsersByTeam = this.UsersByTeam.filter((user) => user.id !== id);
+      },
+      error: (error) => {
+        console.error('Error deleting user:', error);
+      },
+    });
+  }
+  // ეს და addNewManager მეთოდებიც არაა დასრულებული, მწვრთელს ჯერ ვერ მოვასწარი რომ ახალი იუსერების დამატების უფლება მივცე, ამასაც მოგვიანებით დავამთავრებ.
   addNewPlayer() {
-    console.log(this.addPlayerForm.value);
-    if (this.addPlayerForm.valid) {
-      const teamMemberData: User = this.addPlayerForm.value as User;
-      this.auth
-        .registerUser(
-          this.addplayerControl.email.value!,
-          this.addplayerControl.password.value!,
-          teamMemberData,
-        )
-        .subscribe({
-          next: (userCredential) => {
-            console.log('User registered successfully:', userCredential);
-            alert('Make sure new user verifies their email before signing in.');
-          },
-          error: (error) => {
-            console.error('Error registering user:', error.message);
-          },
-        });
-    }
+  //   console.log(this.addPlayerForm.value);
+  //   if (this.addPlayerForm.valid) {
+  //     const teamMemberData: User = this.addPlayerForm.value as User;
+  //     this.auth
+  //       .registerUser(
+  //         this.addplayerControl.email.value!,
+  //         this.addplayerControl.password.value!,
+  //         teamMemberData,
+  //       )
+  //       .subscribe({
+  //         next: (userCredential) => {
+  //           console.log('User registered successfully:', userCredential);
+  //           alert('Make sure new user verifies their email before signing in.');
+  //         },
+  //         error: (error) => {
+  //           console.error('Error registering user:', error.message);
+  //         },
+  //       });
+  //   }
   }
 
   addManager() {
-    console.log(this.addManagerForm.value);
-    if (this.addManagerForm.valid) {
-      const teamMemberData: User = this.addManagerForm.value as User;
-      this.auth
-        .registerUser(
-          this.addManagerControl.email.value!,
-          this.addManagerControl.password.value!,
-          teamMemberData,
-        )
-        .subscribe({
-          next: (userCredential) => {
-            console.log('User registered successfully:', userCredential);
-            alert('Make sure new user verifies their email before signing in.');
-          },
-          error: (error) => {
-            console.error('Error registering user:', error.message);
-          },
-        });
-    }
+    // console.log(this.addManagerForm.value);
+    // if (this.addManagerForm.valid) {
+    //   const teamMemberData: User = this.addManagerForm.value as User;
+    //   this.auth
+    //     .registerUser(
+    //       this.addManagerControl.email.value!,
+    //       this.addManagerControl.password.value!,
+    //       teamMemberData,
+    //     )
+    //     .subscribe({
+    //       next: (userCredential) => {
+    //         console.log('User registered successfully:', userCredential);
+    //         alert('Make sure new user verifies their email before signing in.');
+    //       },
+    //       error: (error) => {
+    //         console.error('Error registering user:', error.message);
+    //       },
+    //     });
+    // }
   }
   addAnnouncement() {
     if (this.addAnnouncementForm.valid && this.user) {
       const formValue = this.addAnnouncementForm.value;
-    const dateValue = formValue.date ? new Date(formValue.date) : new Date();
-    const timestamp = Timestamp.fromDate(dateValue);
+      const dateValue = formValue.date ? new Date(formValue.date) : new Date();
+      const timestamp = Timestamp.fromDate(dateValue);
       const announcement: Announcement = {
         importance: formValue.importance as 'medium' | 'high' | 'low',
         subject: formValue.subject as string,
@@ -288,17 +302,17 @@ export class ProfileComponent implements OnInit {
         id: this.user.id as string,
         date: timestamp as Timestamp,
       };
-  this.announcements.addAnnouncements(announcement).subscribe({
-    next: (docId) => {
-      console.log('Announcement added:', docId);
-      this.addAnnouncementForm.reset();
-    },
-    error: (error) => {
-      console.error('Error adding Announcement:', error);
-    },
-  })
+      this.announcements.addAnnouncements(announcement).subscribe({
+        next: (docId) => {
+          console.log('Announcement added:', docId);
+          this.addAnnouncementForm.reset();
+        },
+        error: (error) => {
+          console.error('Error adding Announcement:', error);
+        },
+      });
     } else {
-      console.log('and i oops!',);
+      console.log('and i oops!');
     }
   }
   deleteAnnouncement(id: string) {
@@ -312,15 +326,7 @@ export class ProfileComponent implements OnInit {
       },
     });
   }
-  passwordMatch() {
-    return (control: AbstractControl): ValidationErrors | null => {
-      return control.value.password === control.value.confirmPassword
-        ? null
-        : {
-            passwordsMatching: 'Passwords do not match!',
-          };
-    };
-  }
+
 
   deleteUser() {
     this.auth.deleteUser().subscribe({
@@ -351,7 +357,6 @@ export class ProfileComponent implements OnInit {
       error: (error) => console.error('Failed to get favorites', error),
     });
   }
-
   loadAnnouncements() {
     this.announcements.getAnnouncementsByTeam().subscribe({
       next: (data) => {
@@ -361,5 +366,14 @@ export class ProfileComponent implements OnInit {
         console.error('Error loading announcements:', error);
       },
     });
+  }
+    passwordMatch() {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return control.value.password === control.value.confirmPassword
+        ? null
+        : {
+            passwordsMatching: 'Passwords do not match!',
+          };
+    };
   }
 }

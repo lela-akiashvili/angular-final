@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { News } from '../../../types/news';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-carousel',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   template: ` <div class="carousel">
     @for (item of items; track $index) {
       <div
@@ -12,7 +13,9 @@ import { News } from '../../../types/news';
         [class]="{ active: $index === currentIndex }"
         [style]="{ 'background-image': 'url(' + item.src + ')' }"
       >
-        <h1>{{ item.title }}</h1>
+        <h1>
+          <a routerLink="/news-page/{{ item.id }}">{{ item.title }}</a>
+        </h1>
       </div>
     }
     <button class="carousel-control prev" (click)="prev()">&#10094;</button>
@@ -23,7 +26,7 @@ import { News } from '../../../types/news';
       position: relative;
       width: 100%;
       height: 50vh;
-      margin: 7rem auto 0 auto;
+      margin: 0 auto 0 auto;
       padding: 0 1rem;
       overflow: hidden;
     }
@@ -64,12 +67,22 @@ import { News } from '../../../types/news';
     .carousel-control.next {
       right: 16px;
     }
-    h1 {
+    a {
+      color: white;
+      text-decoration: none;
       -webkit-text-stroke: 1.5px black;
     }
+    a:hover{
+      text-decoration:underline white;
+    }
     @media (min-width: 800px) {
-      h1 {
+      a {
         font-size: 2rem;
+      }
+    }
+    @media (min-width: 1400px) {
+      .carousel {
+        margin-top: 7rem;
       }
     }
   `,

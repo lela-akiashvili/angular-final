@@ -51,13 +51,7 @@ export class SignUpComponent implements OnInit {
         this.controls.team.setValidators([Validators.required]);
         this.controls.position.setValidators([]);
         this.controls.experience.setValidators([Validators.required]);
-      } else if (userType === 'regularUser') {
-        this.controls.role.setValidators([]);
-        this.controls.team.setValidators([]);
-        this.controls.position.setValidators([]);
-        this.controls.experience.setValidators([]);
-      }
-
+      } 
       this.controls.role.updateValueAndValidity();
       this.controls.team.updateValueAndValidity();
       this.controls.position.updateValueAndValidity();
@@ -71,7 +65,6 @@ export class SignUpComponent implements OnInit {
         this.controls.team.setValidators([]);
         this.controls.experience.setValidators([]);
       }
-
       this.controls.team.updateValueAndValidity();
       this.controls.experience.updateValueAndValidity();
     });

@@ -45,10 +45,6 @@ export class UsersFirebaseService {
   getUsersByTeam(): Observable<User[]> {
     const currentUserTeam = localStorage.getItem('currentUserTeam');
   
-    if (!currentUserTeam) {
-      console.error('Current user team not found in local storage');
-    }
-  
     console.log('Current user team:', currentUserTeam);
   
     const q = query(

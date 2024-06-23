@@ -3,23 +3,22 @@ import { ProfileComponent } from '../profile/profile.component';
 import { NewsCardComponent } from '../../shared/components/news-card/news-card.component';
 import { map } from 'rxjs';
 import { NewsFirebaseService } from '../../shared/services/NewsFirebase.service';
-import { GamesFirebaseService } from '../../shared/services/GamesFirebase.service';
 import { RouterLink } from '@angular/router';
 import { CarouselComponent } from '../../shared/components/carousel/carousel.component';
 import { News } from '../../types/news';
 import { Game } from '../../types/game';
+import { GamesFirebaseService } from '../../shared/services/GamesFirebase.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ProfileComponent, NewsCardComponent,CarouselComponent, RouterLink],
+  imports: [ProfileComponent, NewsCardComponent, CarouselComponent, RouterLink],
   template: `
-    <section> 
+    <section>
       <div>
-          <app-carousel [items]="newsCarousel"></app-carousel>
-      <app-news-card></app-news-card>
-     
+        <app-carousel [items]="newsCarousel"></app-carousel>
+        <app-news-card></app-news-card>
       </div>
-    
+
       <aside>
         <h2>Upcoming Matches</h2>
         <div class="game-container">
@@ -43,45 +42,45 @@ import { Game } from '../../types/game';
   `,
   styles: `
     section {
-      margin-top:7rem;
+      margin-top: 7rem;
       min-height: 100vh;
       max-width: 100vw;
     }
-    h2,h3,a {
+    h2,
+    h3,
+    a {
       text-align: center;
-      color:black;
+      color: black;
     }
     img {
-     min-width:5vw;
+      min-width: 5vw;
       border-radius: 50%;
-      
     }
     .game {
       display: flex;
-      align-items:center ; 
-      border-top:1px solid red;
-       padding-top: 1rem;
+      align-items: center;
+      border-top: 1px solid red;
+      padding-top: 1rem;
     }
-    .team{
-    
+    .team {
     }
-    .game-container{
-      margin:auto;
-      max-width:fit-content;
-    text-align:center;
+    .game-container {
+      margin: auto;
+      max-width: fit-content;
+      text-align: center;
     }
-  
-    @media (max-width:799px){
+
+    @media (max-width: 799px) {
       aside {
-        padding: 0 1rem; 
+        padding: 0 1rem;
         background-color: rgb(235, 235, 235);
-        margin: 1rem
+        margin: 1rem;
+      }
+      img {
+        max-width: 30vw;
+      }
     }
-    img{
-      max-width:30vw;
-    }
-    }
-    
+
     @media (min-width: 800px) {
       section {
         padding: 1rem 2.5rem;
@@ -91,14 +90,13 @@ import { Game } from '../../types/game';
         float: right;
         margin: 7rem 2rem 0 3rem;
         min-width: fit-content;
-        
       }
       .team {
-      max-width: fit-content;
-    }
-    img{
-      width:5vw;
-    }
+        max-width: fit-content;
+      }
+      img {
+        width: 5vw;
+      }
     }
 
     @media (min-width: 1400px) {

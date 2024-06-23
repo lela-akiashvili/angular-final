@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { UsersFirebaseService } from '../../shared/services/UsersFirebase.service';
 import { NewsFirebaseService } from '../../shared/services/NewsFirebase.service';
-import { GamesFirebaseService } from '../../shared/services/GamesFirebase.service';
 import { AnnouncementsFirebase } from '../../shared/services/Announcements.service';
 import {
   ActivatedRoute,
@@ -10,6 +9,7 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { AuthService } from '../../shared/services/Auth.service';
+import { GamesFirebaseService } from '../../shared/services/GamesFirebase.service';
 import {
   AbstractControl,
   FormBuilder,
@@ -38,7 +38,6 @@ import { Announcement } from '../../types/announcement';
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
-  
 })
 export class ProfileComponent implements OnInit {
   private usersFirebaseService = inject(UsersFirebaseService);
@@ -245,25 +244,25 @@ export class ProfileComponent implements OnInit {
   }
   // ეს და addNewManager მეთოდებიც არაა დასრულებული, მწვრთელს ჯერ ვერ მოვასწარი რომ ახალი იუსერების დამატების უფლება მივცე, ამასაც მოგვიანებით დავამთავრებ.
   addNewPlayer() {
-  //   console.log(this.addPlayerForm.value);
-  //   if (this.addPlayerForm.valid) {
-  //     const teamMemberData: User = this.addPlayerForm.value as User;
-  //     this.auth
-  //       .registerUser(
-  //         this.addplayerControl.email.value!,
-  //         this.addplayerControl.password.value!,
-  //         teamMemberData,
-  //       )
-  //       .subscribe({
-  //         next: (userCredential) => {
-  //           console.log('User registered successfully:', userCredential);
-  //           alert('Make sure new user verifies their email before signing in.');
-  //         },
-  //         error: (error) => {
-  //           console.error('Error registering user:', error.message);
-  //         },
-  //       });
-  //   }
+    //   console.log(this.addPlayerForm.value);
+    //   if (this.addPlayerForm.valid) {
+    //     const teamMemberData: User = this.addPlayerForm.value as User;
+    //     this.auth
+    //       .registerUser(
+    //         this.addplayerControl.email.value!,
+    //         this.addplayerControl.password.value!,
+    //         teamMemberData,
+    //       )
+    //       .subscribe({
+    //         next: (userCredential) => {
+    //           console.log('User registered successfully:', userCredential);
+    //           alert('Make sure new user verifies their email before signing in.');
+    //         },
+    //         error: (error) => {
+    //           console.error('Error registering user:', error.message);
+    //         },
+    //       });
+    //   }
   }
 
   addManager() {
@@ -328,7 +327,6 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-
   deleteUser() {
     this.auth.deleteUser().subscribe({
       next: () => {
@@ -368,7 +366,7 @@ export class ProfileComponent implements OnInit {
       },
     });
   }
-    passwordMatch() {
+  passwordMatch() {
     return (control: AbstractControl): ValidationErrors | null => {
       return control.value.password === control.value.confirmPassword
         ? null

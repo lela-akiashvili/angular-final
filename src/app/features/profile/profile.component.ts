@@ -3,10 +3,6 @@ import { UsersFirebaseService } from '../../shared/services/UsersFirebase.servic
 import { NewsFirebaseService } from '../../shared/services/NewsFirebase.service';
 import { GamesFirebaseService } from '../../shared/services/GamesFirebase.service';
 import { AnnouncementsFirebase } from '../../shared/services/Announcements.service';
-import { User } from '../../types/users';
-import { News } from '../../types/news';
-import { Game } from '../../types/game';
-import { Announcement } from '../../types/announcement';
 import {
   ActivatedRoute,
   Router,
@@ -25,6 +21,10 @@ import { NewsCardComponent } from '../../shared/components/news-card/news-card.c
 import { Observable, TimestampProvider, tap, timestamp } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { Timestamp } from 'firebase/firestore';
+import { User } from '../../types/users';
+import { News } from '../../types/news';
+import { Game } from '../../types/game';
+import { Announcement } from '../../types/announcement';
 
 @Component({
   selector: 'app-profile',
@@ -37,7 +37,8 @@ import { Timestamp } from 'firebase/firestore';
     DatePipe,
   ],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css',
+  styleUrls: ['./profile.component.css'],
+  
 })
 export class ProfileComponent implements OnInit {
   private usersFirebaseService = inject(UsersFirebaseService);

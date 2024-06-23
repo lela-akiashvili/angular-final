@@ -1,13 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ProfileComponent } from '../profile/profile.component';
 import { NewsCardComponent } from '../../shared/components/news-card/news-card.component';
+import { map } from 'rxjs';
 import { NewsFirebaseService } from '../../shared/services/NewsFirebase.service';
-import { News } from '../../types/news';
-import { map, take } from 'rxjs';
 import { GamesFirebaseService } from '../../shared/services/GamesFirebase.service';
-import { Game } from '../../types/game';
 import { RouterLink } from '@angular/router';
 import { CarouselComponent } from '../../shared/components/carousel/carousel.component';
+import { News } from '../../types/news';
+import { Game } from '../../types/game';
 @Component({
   selector: 'app-home',
   standalone: true,

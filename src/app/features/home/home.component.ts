@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
 import { CarouselComponent } from '../../shared/components/carousel/carousel.component';
 import { News } from '../../types/news';
 import { Game } from '../../types/game';
-import { GamesFirebaseService } from '../../shared/services/GamesFirebase.service';
+import { GamesFirebaseService } from '../../shared/services/gamesFirebase.service';
 @Component({
   selector: 'app-home',
   standalone: true,

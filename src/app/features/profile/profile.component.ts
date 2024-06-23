@@ -9,7 +9,7 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { AuthService } from '../../shared/services/Auth.service';
-import { GamesFirebaseService } from '../../shared/services/GamesFirebase.service';
+import { GamesFirebaseService } from '../../shared/services/gamesFirebase.service';
 import {
   AbstractControl,
   FormBuilder,

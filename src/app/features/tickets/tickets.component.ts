@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Game } from '../../types/game';
-import { GamesFirebaseService } from '../../shared/services/GamesFirebase.service';
+import { GamesFirebaseService } from '../../shared/services/gamesFirebase.service';
 @Component({
   selector: 'app-tickets',
   standalone: true,

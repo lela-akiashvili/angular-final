@@ -14,6 +14,7 @@ import { Game } from '../../types/game';
 export class GamesFirebaseService {
   private firestore = inject(Firestore);
   private gamesCollection = collection(this.firestore, 'games');
+  // Generics, nice!
   addGames(game: Omit<Game, 'id'>): Observable<string> {
     return from(addDoc(this.gamesCollection, game)).pipe(
       map((docRef) => docRef.id),

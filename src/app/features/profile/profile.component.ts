@@ -18,7 +18,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { NewsCardComponent } from '../../shared/components/news-card/news-card.component';
-import { Observable, TimestampProvider, tap, timestamp } from 'rxjs';
+import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { Timestamp } from 'firebase/firestore';
 import { User } from '../../types/users';
@@ -56,6 +56,7 @@ export class ProfileComponent implements OnInit {
   user: User | null = null;
   ann: Announcement[] = [];
   UsersByTeam: User[] = [];
+  // ტიპი შექმენი ცალკე ამისთვის.
   show:
     | 'news'
     | 'favourites'
@@ -340,6 +341,9 @@ export class ProfileComponent implements OnInit {
   }
 
   loadFavoriteNews(userId: string): void {
+    // ზოგადად სთეითი თუ იცვლება (როგორც აქ მაგალითად faveNews), ჯობია ეგ სთეითი BehaviorSubject იყოს,
+    // და სერვისში მეთოდი გქონდეს, რომლის დაძახებაზეც ეგ საბჯექთი დანექსთდება ახალი მდგომარეობით.
+    // ასე კომპონენტში ნაკლები კოდის წერა მოგიწევს.
     this.usersFirebaseService.getFavorites(userId).subscribe({
       next: (favoriteIds) => {
         favoriteIds.forEach((newsId) => {

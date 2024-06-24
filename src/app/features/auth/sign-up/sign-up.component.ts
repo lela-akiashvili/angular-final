@@ -44,20 +44,22 @@ export class SignUpComponent implements OnInit {
   ngOnInit(): void {
     this.signUpForm.addValidators(this.passwordMatch());
   }
+  // ამ ფუნქციას არ იყენებ
   onchange(): void {
-    this.signUpForm.get('userType')!.valueChanges.subscribe((userType) => {
+    // ესე ჯობია მოუსმინო. get მეთოდმა არ იცის ზუსტად დაბრუნებული კონტროლის ტიპი (ან საერთოდ თუ არსებობს).
+    this.controls.userType.valueChanges.subscribe((userType) => {
       if (userType === 'TeamMember') {
         this.controls.role.setValidators([Validators.required]);
         this.controls.team.setValidators([Validators.required]);
         this.controls.position.setValidators([]);
         this.controls.experience.setValidators([Validators.required]);
-      } 
+      }
       this.controls.role.updateValueAndValidity();
       this.controls.team.updateValueAndValidity();
       this.controls.position.updateValueAndValidity();
       this.controls.experience.updateValueAndValidity();
     });
-    this.signUpForm.get('role')!.valueChanges.subscribe(role => {
+    this.controls.role!.valueChanges.subscribe((role) => {
       if (role === 'manager' || role === 'coach') {
         this.controls.team.setValidators([Validators.required]);
         this.controls.experience.setValidators([Validators.required]);
@@ -74,6 +76,8 @@ export class SignUpComponent implements OnInit {
       const teamMemberData: User = this.signUpForm.value as User;
       this.authService
         .registerUser(
+          // NonNullableFormBuilder-ით შეგიძლია ამ ძახილის ნიშნებს თავი აარიდო.
+          // ოღონდ, რა თქმა უნდა, მაინც ვალიდურობის მიხედვით დარწმუნდი, რომ ველები შევსებულია.
           this.controls.email.value!,
           this.controls.password.value!,
           teamMemberData,

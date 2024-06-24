@@ -1,6 +1,7 @@
 <section>
   <div>
     @if (user && user.userType === "regularUser") {
+    <!-- ისე, აქაც შეგეძლო რაუტერი გამოგეყენებინა. აშკარად რაუტერის გამოყენების მცდელობა აქ გქონდა. -->
       <ul>
         <li (click)="show = 'news'">Your News</li>
         <li (click)="show = 'favourites'">Favourites</li>
@@ -532,7 +533,6 @@
             </div>
           }
           <form
-            action=""
             [formGroup]="addAnnouncementForm"
             (ngSubmit)="addAnnouncement()"
           >

@@ -12,7 +12,7 @@ import { UsersFirebaseService } from './UsersFirebase.service';
 import { NewsFirebaseService } from './NewsFirebase.service';
 import { User } from '../../types/users';
 import { from, Observable, BehaviorSubject, throwError } from 'rxjs';
-import { catchError, switchMap, tap,filter } from 'rxjs/operators';
+import { catchError, switchMap, tap, filter } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -35,7 +35,7 @@ export class AuthService {
   }
   private fetchUserTeam(userId: string) {
     this.usersFirebaseService.getUserById(userId).subscribe((user) => {
-      const team= user.team.toLowerCase();
+      const team = user.team.toLowerCase();
       this.currentUserTeam$.next(team);
       localStorage.setItem('currentUserTeam', team);
     });
@@ -56,6 +56,8 @@ export class AuthService {
           this.usersFirebaseService.addUser(userDataWithoutPassword),
         ).pipe(
           switchMap(() => from(sendEmailVerification(userCredential.user))),
+          // ეს ბოლო switchMap ნაწილი რაღად გინდა?
+          // უბრალოდ მონაცემებს აბრუნებ და map ოპერატორიც საკმარისია. მაგრამ ამ მონაცემს მაინც არ იყენებ.
           switchMap(() => from([userCredential])),
           tap(() => {
             this.currentUserId$.next(uid);
@@ -67,7 +69,9 @@ export class AuthService {
     );
   }
   getUserTeam(): Observable<string | null> {
-    return this.currentUserTeam$.asObservable().pipe(filter((team) => team !== null));
+    return this.currentUserTeam$
+      .asObservable()
+      .pipe(filter((team) => team !== null));
   }
   signInUser(email: string, password: string): Observable<UserCredential> {
     if (this.signedIn$.value) {
@@ -95,6 +99,7 @@ export class AuthService {
   signOutUser(): Observable<void> {
     return from(signOut(this.auth)).pipe(
       tap(() => {
+        console.log('sign out detected from sign out handler');
         this.signedIn$.next(false);
         this.currentUserId$.next(null);
         this.currentUserTeam$.next(null);
@@ -124,6 +129,7 @@ export class AuthService {
         this.currentUserId$.next(null);
       }),
       catchError((error) => {
+        // ერორები ცალ-ცალკე რომ არ დაჰენდლო, შეგიძლია HttpInterceptor შექმნა რომელიც ერორებს იჭერს და მესიჯებს გამოსახავს.
         console.log("something's not right", error);
         return throwError(() => new Error('Failed to delete user.'));
       }),

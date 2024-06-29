@@ -11,6 +11,8 @@ import { GamesFirebaseService } from '../../shared/services/gamesFirebase.servic
 })
 export class TicketsComponent implements OnInit {
   private gameService = inject(GamesFirebaseService);
+  // ძალიან არასაჭიროა აქ სიგნალი. მნიშვნელობა ყოველთვის ერთი აქვს - API-ს დაბრუნებული ერთჯერადი შედეგი.
+  // სიგნალი მაშინ გინდა, როცა მნიშვნელობა ცვალებადია.
   gamesSig = signal<Game[]>([]);
   ngOnInit(): void {
     this.gameService.getGames().subscribe((games) => {

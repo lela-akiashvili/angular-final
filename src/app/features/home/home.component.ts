@@ -6,34 +6,44 @@ import { NewsFirebaseService } from '../../shared/services/NewsFirebase.service'
 import { RouterLink } from '@angular/router';
 import { CarouselComponent } from '../../shared/components/carousel/carousel.component';
 import { News } from '../../types/news';
-import { Game } from '../../types/game';
 import { GamesFirebaseService } from '../../shared/services/gamesFirebase.service';
+import { AsyncPipe } from '@angular/common';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ProfileComponent, NewsCardComponent, CarouselComponent, RouterLink],
+  imports: [
+    ProfileComponent,
+    NewsCardComponent,
+    CarouselComponent,
+    RouterLink,
+    AsyncPipe,
+  ],
   template: `
     <section>
       <div>
-        <app-carousel [items]="newsCarousel"></app-carousel>
+        @if(newsCarousel$ | async; as newsCarousel) {
+          <app-carousel [items]="newsCarousel"></app-carousel>
+        }
         <app-news-card></app-news-card>
       </div>
 
       <aside>
         <h2>Upcoming Matches</h2>
         <div class="game-container">
-          @for (game of gamesArr; track game) {
-            <div class="game">
-              <div class="team">
-                <img [src]="game.src1" alt="" />
-                <h3>{{ game.team1 }}</h3>
+          @if (gamesArr$ | async; as gamesArr) {
+            @for (game of gamesArr; track game) {
+              <div class="game">
+                <div class="team">
+                  <img [src]="game.src1" alt="" />
+                  <h3>{{ game.team1 }}</h3>
+                </div>
+                <span>VS</span>
+                <div class="team">
+                  <img [src]="game.src2" alt="" />
+                  <h3>{{ game.team2 }}</h3>
+                </div>
               </div>
-              <span>VS</span>
-              <div class="team">
-                <img [src]="game.src2" alt="" />
-                <h3>{{ game.team2 }}</h3>
-              </div>
-            </div>
+            }
           }
         </div>
         <a routerLink="/tickets">more</a>
@@ -107,24 +117,17 @@ import { GamesFirebaseService } from '../../shared/services/gamesFirebase.servic
     }
   `,
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   private newsFirebase = inject(NewsFirebaseService);
   private gamesFirebase = inject(GamesFirebaseService);
-  gamesArr: Game[] = [];
-  newsCarousel: News[] = [];
-  ngOnInit(): void {
-    this.newsFirebase
-      .getNews()
-      .pipe(map((news: News[]) => news.slice(0, 4)))
-      .subscribe((news) => {
-        this.newsCarousel = news;
-        console.log(this.newsCarousel);
-      });
-    this.gamesFirebase
-      .getGames()
-      .pipe(map((news) => news.slice(0, 4)))
-      .subscribe((games) => {
-        this.gamesArr = games;
-      });
-  }
+
+  // ასე უფრო *დეკლარაციულია*
+  gamesArr$ = this.gamesFirebase
+    .getGames()
+    .pipe(map((news) => news.slice(0, 4)));
+
+  newsCarousel$ = this.newsFirebase
+    .getNews()
+    .pipe(map((news: News[]) => news.slice(0, 4)));
+
 }

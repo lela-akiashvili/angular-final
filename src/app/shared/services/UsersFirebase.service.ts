@@ -9,16 +9,15 @@ import {
   setDoc,
   updateDoc,
 } from '@angular/fire/firestore';
-import { Observable, from, catchError, throwError, map, switchMap, of } from 'rxjs';
+import { Observable, from, catchError, throwError, map } from 'rxjs';
 import { User } from '../../types/users';
 import { deleteDoc, query, where } from 'firebase/firestore';
-import { AuthService } from './Auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class UsersFirebaseService {
   private firestore = inject(Firestore);
   private usersCollection = collection(this.firestore, 'users');
-  // private authService = inject(AuthService)
+
   getUsers(): Observable<User[]> {
     return collectionData(this.usersCollection, {
       idField: 'id',
@@ -44,18 +43,18 @@ export class UsersFirebaseService {
   }
   getUsersByTeam(): Observable<User[]> {
     const currentUserTeam = localStorage.getItem('currentUserTeam');
-  
+
     console.log('Current user team:', currentUserTeam);
-  
+
     const q = query(
       this.usersCollection,
       where('team', '==', currentUserTeam)
     );
-  
+
     return collectionData(q, { idField: 'id' }) as Observable<User[]>;
   }
-  
-  
+
+
   addUser(user: Omit<User, 'password'>): Promise<void> {
     const userDocRef = doc(this.firestore, `users/${user.id}`);
     return setDoc(userDocRef, user).catch((error) => {

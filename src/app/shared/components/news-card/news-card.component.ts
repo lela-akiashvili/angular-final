@@ -50,10 +50,11 @@ import { FormsModule } from '@angular/forms';
           </span>
         </div>
       }
-    </div> 
+    </div>
   `,
   styleUrl: './news.component.css',
 })
+// NewsCards (მრავლობითში) უფრო სწორი იქნებოდა ამ ფაილისთვის.
 export class NewsCardComponent implements OnInit {
   private newsFirebaseService = inject(NewsFirebaseService);
   private usersFirebaseService = inject(UsersFirebaseService);

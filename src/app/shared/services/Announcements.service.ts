@@ -28,6 +28,8 @@ export class AnnouncementsFirebase {
           this.announcementCollection,
           where('team', '==', team?.toLowerCase()),
         );
+        // წესით აქ შეიძლება collectionData<Announcement[]>() ან რაღაც მსგავსის გაკეთება.
+        // უბრალოდ თავგზა ამიბნი ამ ფუნქციის ჯენერიკ ტიპებმა.
         return collectionData(q, { idField: 'id' }) as Observable<
           Announcement[]
         >;

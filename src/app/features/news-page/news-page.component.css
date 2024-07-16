@@ -25,3 +25,21 @@ h1{
 p{
 text-align: justify;
 }
+@media (min-width: 400px){
+  section{
+    margin: 2rem;
+  }
+  
+}
+@media (min-width: 700px){
+  section{
+    max-width: 1000px;
+    margin: auto;
+   min-height: 80vh;
+  }
+   img{
+      float: left;
+      max-width: 45%;
+      margin:0 2rem 1rem 0;
+    }
+}
